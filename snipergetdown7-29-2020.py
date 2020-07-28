@@ -14,7 +14,7 @@ AT = pullData["accessToken"]
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/skin"  
 # location given here 
-username = "6015245f4d95469ea96aa1d0ffb507b8"
+username = "75da7aef40b942dda249ecd628a64319"
 headers = {"Authorization": "Bearer "+AT}
 data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/alex.png"}
 # defining a params dict for the parameters to be sent to the API 
