@@ -14,13 +14,13 @@ AT = pullData["accessToken"]
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/skin"  
 # location given here 
-username = "6015245f4d95469ea96aa1d0ffb507b8"
+
 headers = {"Authorization": "Bearer "+AT}
-data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/alex.png"}
+data = {"model":"", "url":"minecraftskins.com/uploads/skins/2020/07/28/sad-boy----2-0-14922982.png?v243"}
 # defining a params dict for the parameters to be sent to the API 
 
   
 # sending get request and saving the response as response object 
-r = requests.post(url =  URL+username+URL2, headers = headers, data=data) 
+r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data) 
 
 print("the sniper ducked")
