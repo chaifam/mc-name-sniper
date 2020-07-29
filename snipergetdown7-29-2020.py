@@ -20,15 +20,8 @@ username = input("Whats your username?\n")
 password = input("How about your password:\n")
 usernameid = input("whats your UUID?\n")
 newname = input("what name do you wanna snipe? \n")
-time = input("what time does the name become available?\n")
-print(rightNowTime())
+snipeTime = input("what time does the name become available?\n")
 
-
-username = input("Whats your username?\n")
-password = input("How about your password:\n")
-usernameid = input("What's your UUID?\n")
-newname = input("What name do you wanna snipe? \n")
-snipeTime = input("What time does the name become available?\n")
 
 
 
@@ -43,7 +36,7 @@ URL = "https://api.mojang.com/user/profile/"
 URL2 = "/skin"  
 headers = {"Authorization": "Bearer "+AT}
 data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/steve.png"}
-# defining a params dict for the parameters to be sent to the API 
+
 
   
 # sending get request and saving the response as response object 
