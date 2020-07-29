@@ -23,15 +23,9 @@ newname = input("what name do you wanna snipe? \n").strip()
 snipeYear = input("What year is it?\n").strip()
 snipeMonth = input("What month does the name become available?\n").strip()
 snipeDay = input("What day does the name become available?\n").strip()
-<<<<<<< HEAD
 snipeTime = input("What time does the name become available? (HOUR:MINUTE:SECOND\n").strip()
 snipe = print({}-{}-{} {}).format(snipeYear, snipeMonth, snipeDay, snipeTime)
 
-=======
-snipeTime = input("What time does the name become available? (HOUR:MINUTE:SECOND)\n").strip()
-text = ("{}-{}-{} {}").format(snipeYear, snipeMonth, snipeDay, snipeTime)
-print(text)
->>>>>>> 1abba803f05c719815861ba8ef81b2968b41ea42
 
 
 
