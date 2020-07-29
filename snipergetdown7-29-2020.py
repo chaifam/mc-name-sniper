@@ -4,6 +4,9 @@ import ntplib
 from time import ctime
 from datetime import datetime
 from pytz import timezone
+def split(word): 
+    return list(word)
+
 def rightNowTime():
     eastern = timezone('US/Eastern')
     c = ntplib.NTPClient()
@@ -11,7 +14,7 @@ def rightNowTime():
     response = c.request('us.pool.ntp.org', version=1)
     response.offset
     now = datetime.fromtimestamp(response.tx_time, eastern)
-    return(now)
+    return str(now)
 
     
 
@@ -23,10 +26,10 @@ snipeYear = input("What year is it?\n").strip()
 snipeMonth = input("What month does the name become available?\n").strip()
 snipeDay = input("What day does the name become available?\n").strip()
 snipeTime = input("What time does the name become available? (HOUR:MINUTE:SECOND)\n").strip()
-text = ("{}-{}-{} {}").format(snipeYear, snipeMonth, snipeDay, snipeTime)
+text = ("The goal time is: {}-{}-{} {}").format(snipeYear, snipeMonth, snipeDay, snipeTime)
+x = rightNowTime()
 print(text)
-
-
+print(x[:23])
 
 
 data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
