@@ -56,4 +56,4 @@ data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/steve.png"}
 # sending get request and saving the response as response object 
 r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data) 
 
-print("the sniper shot (2/2)") #tells you program has executed successfully
+print("the sniper shot (2/2)") # program has successfully executed. go check your account!
