@@ -12,8 +12,7 @@ def rightNowTime():
 	response = c.request('us.pool.ntp.org', version=1)
 	response.offset
 	now = datetime.fromtimestamp(response.tx_time, eastern)
-<<<<<<< HEAD
-	return(now)
+
 	
 
 username = input("Whats your username?\n")
@@ -22,9 +21,7 @@ usernameid = input("whats your UUID?\n")
 newname = input("what name do you wanna snipe? \n")
 time = input("what time does the name become available?\n")
 print(rightNowTime())
-=======
-	return now
-	hours, minutes = map(int, "00:00".split(':'))
+
 
 username = input("Whats your username?\n")
 password = input("How about your password:\n")
@@ -32,7 +29,7 @@ usernameid = input("What's your UUID?\n")
 newname = input("What name do you wanna snipe? \n")
 time = input("What time does the name become available?\n")
 real_time = rightNowTime
->>>>>>> aef526f84f136b9890951043bf196f26d8f9e2a2
+
 
 data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
 headersforat = {'Content-Type': 'application/json'}
