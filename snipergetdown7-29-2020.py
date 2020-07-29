@@ -1,3 +1,4 @@
+# importing apis
 import requests 
 import json
 import ntplib
@@ -7,6 +8,7 @@ from datetime import timedelta
 from time import ctime
 from pytz import timezone
 
+# pulling time from official ntp server
 def rightNowTime():
     eastern = timezone('US/Eastern')
     c = ntplib.NTPClient()
@@ -17,13 +19,15 @@ def rightNowTime():
     return str(now)
 
     
-
+# asking user to input information
 username = input("Enter your Mojang e-mail/username:\n").strip()
 password = input("Enter your Mojang password:\n").strip()
 usernameid = input("Enter your UUID:\n").strip()
 newname = input("Enter the name you want to snipe: \n").strip()
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS.mmmmmm format:\n").strip()
+
+#Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
 date_2 = datetime.datetime.strptime(date_time_2_str, '%Y-%m-%d %H:%M:%S.%f')
@@ -35,17 +39,18 @@ time_delta = (date_2 - date_1)
 total_seconds = time_delta.total_seconds()
 minutes = total_seconds/60
 print("{} minutes till snipe".format(minutes))
-print("The sniper scopes in (1/2") #tells you first part of program working
+print("The sniper scopes in (1/2)") #tells you first part of program working
 time.sleep(total_seconds)
 
-
+#logging in to the MC server and returning an access token
 data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
 headersforat = {'Content-Type': 'application/json'}
 data = requests.post('https://authserver.mojang.com/authenticate', data=data, headers=headersforat)
 
 pullData = data.json()
 AT = pullData["accessToken"]
-# api-endpoint 
+
+# setting up url to change name 
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/skin"  
 headers = {"Authorization": "Bearer "+AT}
@@ -56,4 +61,5 @@ data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/steve.png"}
 # sending get request and saving the response as response object 
 r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data) 
 
-print("the sniper shot (2/2)") # program has successfully executed. go check your account!
+print("the sniper shot (2/2)") 
+# program has successfully executed. go check your account!
