@@ -18,12 +18,12 @@ def rightNowTime():
 
     
 
-username = input("Whats your username?\n").strip()
-password = input("How about your password:\n").strip()
-usernameid = input("What is your UUID?\n").strip()
-newname = input("What name do you wanna snipe? \n").strip()
-date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format\n').strip()
-time_entry = input("Enter the time of day the name becomes available in HH:MM:SS.mmmmmm format\n").strip()
+username = input("Enter your Mojang e-mail/username:\n").strip()
+password = input("Enter your Mojang password:\n").strip()
+usernameid = input("Enter your UUID:\n").strip()
+newname = input("Enter the name you want to snipe: \n").strip()
+date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
+time_entry = input("Enter the time of day the name becomes available in HH:MM:SS.mmmmmm format:\n").strip()
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
 date_2 = datetime.datetime.strptime(date_time_2_str, '%Y-%m-%d %H:%M:%S.%f')
