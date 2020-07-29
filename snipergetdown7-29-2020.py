@@ -17,7 +17,7 @@ URL2 = "/skin"
 # location given here 
 
 headers = {"Authorization": "Bearer "+AT}
-data = {"model":"", "url":"minecraftskins.com/uploads/skins/2020/07/28/sad-boy----2-0-14922982.png?v243"}
+data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/steve.png"}
 # defining a params dict for the parameters to be sent to the API 
 
   
