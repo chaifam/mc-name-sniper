@@ -6,8 +6,6 @@ import time
 from datetime import timedelta
 from time import ctime
 from pytz import timezone
-def split(word): 
-    return list(word)
 
 def rightNowTime():
     eastern = timezone('US/Eastern')
@@ -36,9 +34,10 @@ print("The goal time is: {}".format(date_2))
 time_delta = (date_2 - date_1)
 total_seconds = time_delta.total_seconds()
 minutes = total_seconds/60
+print("{} minutes till snipe".format(minutes))
+print("The sniper scopes in (1/2") #tells you first part of program working
 time.sleep(total_seconds)
 
-print("{} minutes till snipe".format(minutes))
 
 data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
 headersforat = {'Content-Type': 'application/json'}
@@ -57,4 +56,4 @@ data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/steve.png"}
 # sending get request and saving the response as response object 
 r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data) 
 
-print("the sniper ducked")
+print("the sniper shot (2/2)") #tells you program has executed successfully
