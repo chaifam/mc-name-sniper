@@ -34,7 +34,7 @@ data = requests.post('https://authserver.mojang.com/authenticate', data=data, he
 
 pullData = data.json()
 AT = pullData["accessToken"]
-print(AT)
+
 #Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
@@ -55,8 +55,8 @@ time.sleep(total_seconds)
 # setting up url to change name 
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/name"  
-headers = {"Authorization": "Bearer "+AT}
-data = {"name": newname}
+headers = {"Authorization": "Bearer "+AT,"Access-Control-Allow-Headers": "authorization"}
+data = {"name": newname, "password": password}
 
 
   
