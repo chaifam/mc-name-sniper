@@ -55,14 +55,14 @@ time.sleep(total_seconds)
 # setting up url to change name 
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/name"  
-headers = {"Authorization": "Bearer "+AT,"Access-Control-Allow-Headers": "authorization"}
-data = {"name": newname, "password": password}
+headers = {"Authorization": "Bearer "+AT}
+data2 = json.dumps({"name": newname, "password":password})
 
 
   
 # sending get request and saving the response as response object 
-r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data) 
-
+r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2) 
+print (r.status_code + r.error+ r.text)
 print("the sniper shot (2/2)") 
-print (r.text)
+
 # program has successfully executed. go check your account!
