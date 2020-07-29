@@ -24,7 +24,7 @@ snipeYear = input("What year is it?\n").strip()
 snipeMonth = input("What month does the name become available?\n").strip()
 snipeDay = input("What day does the name become available?\n").strip()
 snipeTime = input("What time does the name become available? (HOUR:MINUTE:SECOND\n").strip()
-snipe = print("{}-{}-{} {}").format(snipeYear, snipeMonth, snipeDay, snipeTime)
+snipe = print({}-{}-{} {}).format(snipeYear, snipeMonth, snipeDay, snipeTime)
 
 
 
