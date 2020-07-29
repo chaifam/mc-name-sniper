@@ -52,9 +52,9 @@ AT = pullData["accessToken"]
 
 # setting up url to change name 
 URL = "https://api.mojang.com/user/profile/"
-URL2 = "/skin"  
+URL2 = "/name"  
 headers = {"Authorization": "Bearer "+AT}
-data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/steve.png"}
+data = {"name": newaname}
 
 
   
