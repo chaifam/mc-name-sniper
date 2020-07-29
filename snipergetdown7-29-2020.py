@@ -3,10 +3,15 @@ import requests
 import json
 import ntplib
 from time import ctime
+from datetime import datetime
+from pytz import timezone
 
+eastern = timezone('US/Eastern')
 c = ntplib.NTPClient()
-response = c.request('europe.pool.ntp.org', version=3)
-print(ctime(response.tx_time))
+# Provide the respective ntp server ip in below function
+response = c.request('us.pool.ntp.org', version=1)
+response.offset
+print (datetime.fromtimestamp(response.tx_time, eastern))
 
 
 username = input("Whats your username?\n")
@@ -21,8 +26,6 @@ AT = pullData["accessToken"]
 # api-endpoint 
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/skin"  
-# location given here 
-
 headers = {"Authorization": "Bearer "+AT}
 data = {"model":"", "url":"http://assets.mojang.com/SkinTemplates/steve.png"}
 # defining a params dict for the parameters to be sent to the API 
