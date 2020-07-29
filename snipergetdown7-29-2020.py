@@ -34,7 +34,7 @@ data = requests.post('https://authserver.mojang.com/authenticate', data=data, he
 
 pullData = data.json()
 AT = pullData["accessToken"]
-
+print(AT)
 #Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
