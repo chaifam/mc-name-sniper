@@ -36,7 +36,7 @@ time_delta = (date_2 - date_1)
 total_seconds = time_delta.total_seconds()
 minutes = total_seconds/60
 
-print(minutes)
+print("{} minutes till snipe".format(minutes))
 
 data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
 headersforat = {'Content-Type': 'application/json'}
