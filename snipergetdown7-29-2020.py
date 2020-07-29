@@ -5,7 +5,7 @@ import ntplib
 from time import ctime
 from datetime import datetime
 from pytz import timezone
-def time():
+def rightNowTime():
 	eastern = timezone('US/Eastern')
 	c = ntplib.NTPClient()
 	# Provide the respective ntp server ip in below function
@@ -13,13 +13,14 @@ def time():
 	response.offset
 	now = datetime.fromtimestamp(response.tx_time, eastern)
 	print(now)
+	hours, minutes = map(int, "00:00".split(':'))
 
 username = input("Whats your username?\n")
 password = input("How about your password:\n")
 usernameid = input("whats your UUID?\n")
 newname = input("what name do you wanna snipe? \n")
 time = input("what time does the name become available?\n")
-rightNowTime();
+rightNowTime()
 
 data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
 headersforat = {'Content-Type': 'application/json'}
