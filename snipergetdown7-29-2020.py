@@ -54,7 +54,7 @@ AT = pullData["accessToken"]
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/name"  
 headers = {"Authorization": "Bearer "+AT}
-data = {"name": newaname}
+data = {"name": newname}
 
 
   
