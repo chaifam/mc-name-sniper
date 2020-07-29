@@ -27,6 +27,14 @@ newname = input("Enter the name you want to snipe: \n").strip()
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS.mmmmmm format:\n").strip()
 
+#logging in to the MC server and returning an access token
+data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
+headersforat = {'Content-Type': 'application/json'}
+data = requests.post('https://authserver.mojang.com/authenticate', data=data, headers=headersforat)
+
+pullData = data.json()
+AT = pullData["accessToken"]
+print(AT)
 #Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
@@ -42,13 +50,7 @@ print("{} minutes till snipe".format(minutes))
 print("The sniper scopes in (1/2)") #tells you first part of program working
 time.sleep(total_seconds)
 
-#logging in to the MC server and returning an access token
-data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
-headersforat = {'Content-Type': 'application/json'}
-data = requests.post('https://authserver.mojang.com/authenticate', data=data, headers=headersforat)
 
-pullData = data.json()
-AT = pullData["accessToken"]
 
 # setting up url to change name 
 URL = "https://api.mojang.com/user/profile/"
