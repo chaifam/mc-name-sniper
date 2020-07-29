@@ -62,7 +62,7 @@ data2 = json.dumps({"name": newname, "password":password})
   
 # sending get request and saving the response as response object 
 r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2) 
-print (r.status_code + r.error+ r.text)
+print (r.status_code + r.text)
 print("the sniper shot (2/2)") 
 
 # program has successfully executed. go check your account!
