@@ -2,6 +2,7 @@ import requests
 import json
 import ntplib
 import datetime
+import time
 from datetime import timedelta
 from time import ctime
 from pytz import timezone
@@ -35,6 +36,7 @@ print("The goal time is: {}".format(date_2))
 time_delta = (date_2 - date_1)
 total_seconds = time_delta.total_seconds()
 minutes = total_seconds/60
+time.sleep(total_seconds)
 
 print("{} minutes till snipe".format(minutes))
 
