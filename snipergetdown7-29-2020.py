@@ -16,11 +16,15 @@ def rightNowTime():
 
 	
 
-username = input("Whats your username?\n")
-password = input("How about your password:\n")
-usernameid = input("whats your UUID?\n")
-newname = input("what name do you wanna snipe? \n")
-snipeTime = input("what time does the name become available?\n")
+username = input("Whats your username?\n").strip()
+password = input("How about your password:\n").strip()
+usernameid = input("whats your UUID?\n").strip()
+newname = input("what name do you wanna snipe? \n").strip()
+snipeYear = input("What year is it?\n").strip()
+snipeMonth = input("What month does the name become available?\n").strip()
+snipeDay = input("What day does the name become available?\n").strip()
+snipeTime = input("What time does the name become available? (HOUR:MINUTE:SECOND\n").strip()
+snipe = print("{}-{}-{} {}").format(snipeYear, snipeMonth, snipeDay, snipeTime)
 
 
 
