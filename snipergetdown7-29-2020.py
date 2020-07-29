@@ -1,8 +1,9 @@
 import requests 
 import json
 import ntplib
+import datetime
+from datetime import timedelta
 from time import ctime
-from datetime import datetime
 from pytz import timezone
 def split(word): 
     return list(word)
@@ -13,24 +14,29 @@ def rightNowTime():
     # Provide the respective ntp server ip in below function
     response = c.request('us.pool.ntp.org', version=1)
     response.offset
-    now = datetime.fromtimestamp(response.tx_time, eastern)
+    now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
     return str(now)
 
     
 
 username = input("Whats your username?\n").strip()
 password = input("How about your password:\n").strip()
-usernameid = input("whats your UUID?\n").strip()
-newname = input("what name do you wanna snipe? \n").strip()
-snipeYear = input("What year is it?\n").strip()
-snipeMonth = input("What month does the name become available?\n").strip()
-snipeDay = input("What day does the name become available?\n").strip()
-snipeTime = input("What time does the name become available? (HOUR:MINUTE:SECOND)\n").strip()
-text = ("The goal time is: {}-{}-{} {}").format(snipeYear, snipeMonth, snipeDay, snipeTime)
-x = rightNowTime()
-print(text)
-print(x[:23])
+usernameid = input("What is your UUID?\n").strip()
+newname = input("What name do you wanna snipe? \n").strip()
+date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format\n').strip()
+time_entry = input("Enter the time of day the name becomes available in HH:MM:SS.mmmmmm format\n").strip()
+x = rightNowTime() 
+date_time_2_str = (date_entry + " " + time_entry)
+date_2 = datetime.datetime.strptime(date_time_2_str, '%Y-%m-%d %H:%M:%S.%f')
+date_time_1_str = (x[:23])
+date_1 = datetime.datetime.strptime(date_time_1_str, '%Y-%m-%d %H:%M:%S.%f')
+print("The current time is: {}".format(date_1))
+print("The goal time is: {}".format(date_2))
+time_delta = (date_2 - date_1)
+total_seconds = time_delta.total_seconds()
+minutes = total_seconds/60
 
+print(minutes)
 
 data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
 headersforat = {'Content-Type': 'application/json'}
