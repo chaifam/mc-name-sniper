@@ -62,4 +62,5 @@ data = {"name": newname}
 r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data) 
 
 print("the sniper shot (2/2)") 
+print (r.text)
 # program has successfully executed. go check your account!
