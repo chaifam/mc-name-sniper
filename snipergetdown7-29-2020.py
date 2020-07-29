@@ -1,6 +1,13 @@
 # importing the requests library 
 import requests 
 import json
+import ntplib
+from time import ctime
+
+c = ntplib.NTPClient()
+response = c.request('europe.pool.ntp.org', version=3)
+print(ctime(response.tx_time))
+
 
 username = input("Whats your username?\n")
 password = input("How about your password:\n")
