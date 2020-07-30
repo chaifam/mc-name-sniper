@@ -8,6 +8,9 @@ from datetime import timedelta
 from time import ctime
 from pytz import timezone
 
+useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
+
+
 # pulling time from official ntp server
 def rightNowTime():
     eastern = timezone('US/Eastern')
@@ -19,22 +22,15 @@ def rightNowTime():
     return str(now)
 
     
-# asking user to input information
-username = input("Enter your Mojang e-mail/username:\n").strip()
+newname = input("Enter the name you want to snipe: \n").strip()
 password = input("Enter your Mojang password:\n").strip()
 usernameid = input("Enter your UUID:\n").strip()
-newname = input("Enter the name you want to snipe: \n").strip()
+AT = input("Enter your Bearer Token\n")
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS.mmmmmm format:\n").strip()
 
-#logging in to the MC server and returning an access token
-data = json.dumps({"agent":{"name":"Minecraft","version":1},"username":username,"password":password,"clientToken":""})
-headersforat = {'Content-Type': 'application/json'}
-data = requests.post('https://authserver.mojang.com/authenticate', data=data, headers=headersforat)
 
-pullData = data.json()
-AT = pullData["accessToken"]
-print(AT)
+
 #Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
@@ -48,6 +44,7 @@ total_seconds = time_delta.total_seconds()
 minutes = total_seconds/60
 print("{} minutes till snipe".format(minutes))
 print("The sniper scopes in (1/2)") #tells you first part of program working
+total_seconds-=0.245
 time.sleep(total_seconds)
 
 
@@ -55,14 +52,14 @@ time.sleep(total_seconds)
 # setting up url to change name 
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/name"  
-headers = {"Authorization": "Bearer "+AT}
+headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
 data2 = json.dumps({"name": newname, "password":password})
 
 
   
 # sending get request and saving the response as response object 
 r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2) 
+t1 = time.perf_counter()
 print (r.status_code, r.text)
 print("the sniper shot (2/2)") 
-
 # program has successfully executed. go check your account!
