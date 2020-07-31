@@ -50,6 +50,7 @@ time.sleep(total_seconds)
 
 
 # setting up url to change name 
+time0 = time.perf_counter();
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/name"  
 headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
@@ -61,5 +62,7 @@ data2 = json.dumps({"name": newname, "password":password})
 r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2) 
 
 print (r.status_code, r.text)
-print("the sniper shot (2/2)") 
+time1 = time.perf_counter();
+timetoprocess = str(time1-time0)
+print("the sniper shot (2/2), it took " + timetoprocess + " after the name became available to snipe it.") 
 # program has successfully executed. go check your account!
