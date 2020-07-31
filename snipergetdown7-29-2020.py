@@ -45,12 +45,12 @@ minutes = total_seconds/60
 print("{} minutes till snipe".format(minutes))
 print("The sniper scopes in (1/2)") #tells you first part of program working
 total_seconds-=0.245
+time0 = time.perf_counter();
 time.sleep(total_seconds)
 
 
 
 # setting up url to change name 
-time0 = time.perf_counter();
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/name"  
 headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
