@@ -21,6 +21,12 @@ def rightNowTime():
     now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
     return str(now)
 
+for i in range(10):
+	pingteststart = time.perf_counter();
+	pingtest = requests.post(url =  "https://api.mojang.com/user/profile/24c182c6716b47c68f60a1be9045c449/name") 
+	pingtestend = time.perf_counter();
+	print(pingtestend-pingteststart)
+
     
 newname = input("Enter the name you want to snipe: \n").strip()
 password = input("Enter your Mojang password:\n").strip()
@@ -28,7 +34,6 @@ usernameid = input("Enter your UUID:\n").strip()
 AT = input("Enter your Bearer Token\n")
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS.mmmmmm format:\n").strip()
-
 
 
 #Justins code (magic)
@@ -50,7 +55,7 @@ time.sleep(total_seconds)
 
 
 # setting up url to change name 
-time0 = time.perf_counter()
+time0 = time.perf_counter();
 URL = "https://api.mojang.com/user/profile/"
 URL2 = "/name"  
 headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
@@ -62,7 +67,7 @@ data2 = json.dumps({"name": newname, "password":password})
 r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2) 
 
 print (r.status_code, r.text)
-time1 = time.perf_counter()
+time1 = time.perf_counter();
 timetoprocess = str(time1-time0)
 print("the sniper shot (2/2), it took " + timetoprocess + " after the name became available to snipe it.") 
 # program has successfully executed. go check your account!
