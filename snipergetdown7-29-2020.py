@@ -67,13 +67,15 @@ headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
 data2 = json.dumps({"name": newname, "password":password})
 
 
-  
 # sending get request and saving the response as response object 
 n = 0
 while n < (30):
+	t = str(datetime.datetime.now().time())
+	current_time = datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S.%f')
 	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
 	if not r:
 		print("REQUEST FAILED [{}]\n".format(n))
+		print("Current Time =", current_time)
 		n += 1
 	else:
 		print("REQUEST SUCCESSFUL [{}]\n".format(n))
