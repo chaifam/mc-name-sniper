@@ -10,24 +10,31 @@ from pytz import timezone
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 
+a = 0
 
 # pulling time from official ntp server
 def rightNowTime():
-    eastern = timezone('US/Eastern')
-    c = ntplib.NTPClient()
-    # Provide the respective ntp server ip in below function
-    response = c.request('us.pool.ntp.org', version=1)
-    response.offset
-    now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
-    return str(now)
+	eastern = timezone('US/Eastern')
+	c = ntplib.NTPClient()
+	# Provide the respective ntp server ip in below function
+	response = c.request('us.pool.ntp.org', version=1)
+	response.offset
+	now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
+	return str(now)
+
+
 
 for i in range(10):
-	pingteststart = time.perf_counter();
+	pingteststart = time.perf_counter()
 	pingtest = requests.post(url =  "https://api.mojang.com/user/profile/24c182c6716b47c68f60a1be9045c449/name") 
-	pingtestend = time.perf_counter();
+	pingtestend = time.perf_counter()
+	a += (pingtestend - pingteststart)
 	print(pingtestend-pingteststart)
+average_ping = a/10
+print("Average ping to Mojang servers: {} \n".format(average_ping))
 
-    
+
+	
 newname = input("Enter the name you want to snipe: \n").strip()
 password = input("Enter your Mojang password:\n").strip()
 usernameid = input("Enter your UUID:\n").strip()
@@ -49,7 +56,6 @@ total_seconds = time_delta.total_seconds()
 minutes = total_seconds/60
 print("{} minutes till snipe".format(minutes))
 print("The sniper scopes in (1/2)") #tells you first part of program working
-total_seconds-=0.18
 time.sleep(total_seconds)
 
 
@@ -64,10 +70,18 @@ data2 = json.dumps({"name": newname, "password":password})
 
   
 # sending get request and saving the response as response object 
-r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2) 
+while i < (30):
+	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
+	if not r:
+		print("REQUEST FAILED [{}]\n".format(i))
+		i += 1
+	else:
+		print("REQUEST SUCCESSFUL [{}]\n".format(i))
+		print("You got the name!\n")
+		break
 
-print (r.status_code, r.text)
+print(r.status_code, r.text)
 time1 = time.perf_counter();
 timetoprocess = str(time1-time0)
-print("the sniper shot (2/2), it took " + timetoprocess + " after the name became available to snipe it.") 
+print("the sniper shot (2/2), it took " + timetoprocess + " seconds to send the requests!") 
 # program has successfully executed. go check your account!
