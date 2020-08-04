@@ -74,7 +74,7 @@ while n < (30):
 	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
 	if not r:
 		print("REQUEST FAILED [{}]\n".format(i))
-		c += 1
+		n += 1
 	else:
 		print("REQUEST SUCCESSFUL [{}]\n".format(i))
 		print("You got the name!\n")
