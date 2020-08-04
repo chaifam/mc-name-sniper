@@ -10,7 +10,6 @@ from pytz import timezone
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 
-a = 0
 
 # pulling time from official ntp server
 def rightNowTime():
@@ -22,7 +21,7 @@ def rightNowTime():
 	now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
 	return str(now)
 
-
+a = 0
 
 for i in range(10):
 	pingteststart = time.perf_counter()
@@ -70,7 +69,8 @@ data2 = json.dumps({"name": newname, "password":password})
 
   
 # sending get request and saving the response as response object 
-while i < (30):
+n = 0
+while n < (30):
 	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
 	if not r:
 		print("REQUEST FAILED [{}]\n".format(i))
