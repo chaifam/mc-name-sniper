@@ -55,7 +55,7 @@ total_seconds = time_delta.total_seconds()
 minutes = total_seconds/60
 print("{} minutes till snipe".format(minutes))
 print("The sniper scopes in (1/2)") #tells you first part of program working
-time.sleep(total_seconds)
+time.sleep(total_seconds - average_ping)
 
 
 
@@ -74,7 +74,7 @@ while n < (30):
 	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
 	if not r:
 		print("REQUEST FAILED [{}]\n".format(i))
-		i += 1
+		c += 1
 	else:
 		print("REQUEST SUCCESSFUL [{}]\n".format(i))
 		print("You got the name!\n")
