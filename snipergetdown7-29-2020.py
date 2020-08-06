@@ -4,9 +4,13 @@ import json
 import ntplib
 import datetime
 import time
+from colorama import init
+from termcolor import colored
 from datetime import timedelta
 from time import ctime
 from pytz import timezone
+
+init()
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 
@@ -39,13 +43,13 @@ password = input("Enter your Mojang password:\n").strip()
 usernameid = input("Enter your UUID:\n").strip()
 AT = input("Enter your Bearer Token\n")
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
-time_entry = input("Enter the time of day the name becomes available in HH:MM:SS.mmmmmm format:\n").strip()
+time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
 
 
 #Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
-date_2 = datetime.datetime.strptime(date_time_2_str, '%Y-%m-%d %H:%M:%S.%f')
+date_2 = datetime.datetime.strptime(date_time_2_str, '%Y-%m-%d %H:%M:%S')
 date_time_1_str = (x[:23])
 date_1 = datetime.datetime.strptime(date_time_1_str, '%Y-%m-%d %H:%M:%S.%f')
 print("The current time is: {}".format(date_1))
@@ -66,20 +70,19 @@ URL2 = "/name"
 headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
 data2 = json.dumps({"name": newname, "password":password})
 
-
 # sending get request and saving the response as response object 
 n = 0
 while n < (30):
-	t = str(datetime.datetime.now().time())
-	current_time = datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S.%f')
+	t = datetime.datetime.now().time()
 	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
 	if not r:
-		print("REQUEST FAILED [{}]\n".format(n))
-		print("Current Time =", current_time)
+		print(colored("REQUEST FAILED[{}]\n", "red").format(n))
+		print("Current Time =", t)
 		n += 1
 	else:
-		print("REQUEST SUCCESSFUL [{}]\n".format(n))
+		print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(n))
 		print("You got the name!\n")
+		print("Current Time =", t)
 		break
 
 print(r.status_code, r.text)
