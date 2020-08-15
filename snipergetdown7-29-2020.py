@@ -40,12 +40,13 @@ print("Average ping to Mojang servers: {} \n".format(average_ping))
 	
 newname = input("Enter the name you want to snipe: \n").strip()
 password = input("Enter your Mojang password:\n").strip()
-usernameid = input("Enter your UUID:\n").strip()
+username = input("Enter your username:\n").strip()
 AT = input("Enter your Bearer Token\n")
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
 
-
+usernameid = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
+print(usernameid.id)
 #Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
