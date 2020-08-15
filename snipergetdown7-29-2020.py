@@ -45,8 +45,10 @@ AT = input("Enter your Bearer Token\n")
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
 
-usernameid = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
-print(usernameid.id)
+usernameidreq = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
+jsonusernameid = usernameidreq.json()
+usernameid = jsonusernameid["id"]
+print(usernameid)
 #Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
