@@ -1,10 +1,12 @@
 # importing apis
 import requests 
+import random
 import json
 import ntplib
 import datetime
 import time
 from colorama import init
+from bs4 import BeautifulSoup as bs
 from termcolor import colored
 from datetime import timedelta
 from time import ctime
@@ -24,6 +26,45 @@ def rightNowTime():
 	response.offset
 	now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
 	return str(now)
+
+def get_free_proxies():
+	url = "https://free-proxy-list.net/"
+	# get the HTTP response and construct soup object
+	soup = bs(requests.get(url).content, "html.parser")
+	proxies = []
+	for row in soup.find("table", attrs={"id": "proxylisttable"}).find_all("tr")[1:]:
+		tds = row.find_all("td")
+		try:
+			ip = tds[0].text.strip()
+			port = tds[1].text.strip()
+			host = f"{ip}:{port}"
+			proxies.append(host)
+		except IndexError:
+			continue
+	return proxies
+
+def get_session(proxies):
+	# construct an HTTP session
+	session = requests.Session()
+	# choose random proxies
+	proxy = random.choice(proxies)
+	session.proxies = {"http": proxy, "https": proxy}
+	return session
+
+
+proxies = get_free_proxies()
+
+print(proxies)
+
+for q in range(30):
+	s = get_session(proxies)
+	try:
+		print("Request page with IP:", s.get("http://icanhazip.com", timeout=1.5).text.strip())
+	except Exception as e:
+		continue
+
+
+
 
 a = 0
 
