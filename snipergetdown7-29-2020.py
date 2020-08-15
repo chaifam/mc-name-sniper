@@ -46,7 +46,7 @@ date_entry = input('Enter the date the name becomes available in YYYY-MM-DD form
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
 
 usernameidreq = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
-jsonusernameid = usernameidreq.json()
+jsonusernameid = usernameidreq.json()ggfgfgfgfggfg-
 usernameid = jsonusernameid["id"]
 print(usernameid)
 #Justins code (magic)
@@ -76,7 +76,7 @@ data2 = json.dumps({"name": newname, "password":password})
 # sending get request and saving the response as response object 
 n = 0
 while n < (30):
-	t = datetime.datetime.now().time()
+	t = rightNowTime()
 	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
 	if not r:
 		print(colored("REQUEST FAILED[{}]\n", "red").format(n))
