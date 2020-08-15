@@ -87,7 +87,7 @@ date_entry = input('Enter the date the name becomes available in YYYY-MM-DD form
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
 
 usernameidreq = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
-jsonusernameid = usernameidreq.json()ggfgfgfgfggfg-
+jsonusernameid = usernameidreq.json()
 usernameid = jsonusernameid["id"]
 print(usernameid)
 #Justins code (magic)
