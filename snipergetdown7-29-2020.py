@@ -51,12 +51,11 @@ def get_session(proxies):
 	session.proxies = {"http": proxy, "https": proxy}
 	return session
 
-
 proxies = get_free_proxies()
 
 print(proxies)
 
-for q in range(30):
+for q in range(100):
 	s = get_session(proxies)
 	try:
 		print("Request page with IP:", s.get("http://icanhazip.com", timeout=1.5).text.strip())
