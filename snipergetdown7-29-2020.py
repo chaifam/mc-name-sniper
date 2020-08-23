@@ -67,7 +67,7 @@ def get_valid_proxy(proxy_list): #format of items e.g. '128.2.198.188:3124'
 
 def g():
 	n = 0
-	while n < (15):
+	while n < (30):
 		s = get_session(proxy_choices)
 		t = datetime.datetime.now()
 		r = s.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
