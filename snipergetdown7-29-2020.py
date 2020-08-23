@@ -67,8 +67,8 @@ def get_valid_proxy(proxy_list): #format of items e.g. '128.2.198.188:3124'
 
 def g():
 	n = 0
-	while n < (30):
-		s = get_session(proxy_choices)
+	while n < (15):
+		s = get_session(actual_proxy_choices)
 		t = datetime.datetime.now()
 		r = s.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
 		print(s.get("http://icanhazip.com", timeout=1.5).text.strip())
@@ -83,7 +83,7 @@ def g():
 			break
 
 proxy_choices = get_free_proxies()
-
+actual_proxy_choices = get_valid_proxy(proxy_choices)
 print(proxy_choices)
 
 ip_list = []
