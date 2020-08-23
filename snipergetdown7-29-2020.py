@@ -31,7 +31,6 @@ def get_free_proxies():
 	url = "https://free-proxy-list.net/"
 	# get the HTTP response and construct soup object
 	soup = bs(requests.get(url).content, "html.parser")
-	proxies = []
 	for row in soup.find("table", attrs={"id": "proxylisttable"}).find_all("tr")[1:]:
 		tds = row.find_all("td")
 		try:
@@ -51,25 +50,33 @@ def get_session(proxies):
 	session.proxies = {"http": proxy, "https": proxy}
 	return session
 
-proxies = get_free_proxies()
+proxies = []
 
-print(proxies)
+print(get_free_proxies())
+
+ip_list = []
+
+print(colored("Gathering proxies, this may take a while...", "cyan"))
 
 for q in range(100):
+
 	s = get_session(proxies)
 	try:
-		print("Request page with IP:", s.get("http://icanhazip.com", timeout=1.5).text.strip())
+		ip = s.get("http://icanhazip.com", timeout=1.5).text.strip()
 	except Exception as e:
 		continue
+	ip_list.append(ip)
 
+filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
 
+print(filtered_ip_list)
 
 
 a = 0
 
 for i in range(10):
 	pingteststart = time.perf_counter()
-	pingtest = requests.post(url =  "https://api.mojang.com/user/profile/24c182c6716b47c68f60a1be9045c449/name") 
+	pingtest = requests.post(url = "https://api.mojang.com/user/profile/24c182c6716b47c68f60a1be9045c449/name") 
 	pingtestend = time.perf_counter()
 	a += (pingtestend - pingteststart)
 	print(pingtestend-pingteststart)
@@ -99,8 +106,9 @@ print("The current time is: {}".format(date_1))
 print("The goal time is: {}".format(date_2))
 time_delta = (date_2 - date_1)
 total_seconds = time_delta.total_seconds()
-minutes = total_seconds/60
-print("{} minutes till snipe".format(minutes))
+time = total_seconds/60
+result = str(datetime.timedelta(minutes=time))
+print("{} minutes till snipe".format(result))
 print("The sniper scopes in (1/2)") #tells you first part of program working
 time.sleep(total_seconds - average_ping)
 
@@ -117,7 +125,7 @@ data2 = json.dumps({"name": newname, "password":password})
 n = 0
 while n < (30):
 	t = rightNowTime()
-	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
+	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2, proxies = filtered_ip_list)
 	if not r:
 		print(colored("REQUEST FAILED[{}]\n", "red").format(n))
 		print("Current Time =", t)
