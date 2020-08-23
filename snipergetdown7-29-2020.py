@@ -5,6 +5,8 @@ import json
 import ntplib
 import datetime
 import time
+import threading
+from grab import Grab, GrabError
 from colorama import init
 from bs4 import BeautifulSoup as bs
 from termcolor import colored
@@ -29,6 +31,7 @@ def rightNowTime():
 
 def get_free_proxies():
 	url = "https://free-proxy-list.net/"
+	proxies = []
 	# get the HTTP response and construct soup object
 	soup = bs(requests.get(url).content, "html.parser")
 	for row in soup.find("table", attrs={"id": "proxylisttable"}).find_all("tr")[1:]:
@@ -50,26 +53,55 @@ def get_session(proxies):
 	session.proxies = {"http": proxy, "https": proxy}
 	return session
 
-proxies = []
+def get_valid_proxy(proxy_list): #format of items e.g. '128.2.198.188:3124'
+    g = Grab()
+    for proxy in proxy_list:
+        g.setup(proxy=proxy, proxy_type='http', connect_timeout=5, timeout=5)
+        try:
+            g.go('google.com')
+        except GrabError:
+            logging.info("Test error")
+            pass
+        else:
+            yield proxy
 
-print(get_free_proxies())
+def g():
+	n = 0
+	while n < (30):
+		s = get_session(proxy_choices)
+		t = datetime.datetime.now()
+		r = s.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
+		print(s.get("http://icanhazip.com", timeout=1.5).text.strip())
+		if not r:
+			print(colored("REQUEST FAILED[{}]\n", "red").format(n))
+			print("Current Time =", t)
+			n += 1
+		else:
+			print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(n))
+			print("You got the name!\n")
+			print("Current Time =", t)
+			break
+
+proxy_choices = get_free_proxies()
+
+print(proxy_choices)
 
 ip_list = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
-for q in range(100):
+#for q in range(100):
 
-	s = get_session(proxies)
-	try:
-		ip = s.get("http://icanhazip.com", timeout=1.5).text.strip()
-	except Exception as e:
-		continue
-	ip_list.append(ip)
+#	s = get_session(proxies)
+#	try:
+#		ip = s.get("http://icanhazip.com", timeout=1.5).text.strip()
+#	except Exception as e:
+#		continue
+#	ip_list.append(ip)
 
-filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
+#filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
 
-print(filtered_ip_list)
+#print(filtered_ip_list)
 
 
 a = 0
@@ -106,11 +138,12 @@ print("The current time is: {}".format(date_1))
 print("The goal time is: {}".format(date_2))
 time_delta = (date_2 - date_1)
 total_seconds = time_delta.total_seconds()
-time = total_seconds/60
-result = str(datetime.timedelta(minutes=time))
-print("{} minutes till snipe".format(result))
-print("The sniper scopes in (1/2)") #tells you first part of program working
+clock = total_seconds/60
+result = str(datetime.timedelta(minutes=clock))
+print("{} till snipe".format(result))
 time.sleep(total_seconds - average_ping)
+print("The sniper scopes in (1/2)") #tells you first part of program working
+
 
 
 
@@ -122,19 +155,8 @@ headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
 data2 = json.dumps({"name": newname, "password":password})
 
 # sending get request and saving the response as response object 
-n = 0
-while n < (30):
-	t = rightNowTime()
-	r = requests.post(url =  URL+usernameid+URL2, headers = headers, data=data2, proxies = filtered_ip_list)
-	if not r:
-		print(colored("REQUEST FAILED[{}]\n", "red").format(n))
-		print("Current Time =", t)
-		n += 1
-	else:
-		print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(n))
-		print("You got the name!\n")
-		print("Current Time =", t)
-		break
+for request in range(100):
+	threading.Thread(target=g).start()
 
 print(r.status_code, r.text)
 time1 = time.perf_counter();
