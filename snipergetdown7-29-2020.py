@@ -29,49 +29,69 @@ def rightNowTime():
 	now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
 	return str(now)
 
-def get_free_proxies():
-	url = "https://free-proxy-list.net/"
-	proxies = []
-	# get the HTTP response and construct soup object
-	soup = bs(requests.get(url).content, "html.parser")
-	for row in soup.find("table", attrs={"id": "proxylisttable"}).find_all("tr")[1:]:
-		tds = row.find_all("td")
-		try:
-			ip = tds[0].text.strip()
-			port = tds[1].text.strip()
-			host = f"{ip}:{port}"
-			proxies.append(host)
-		except IndexError:
-			continue
-	return proxies
+#def get_free_proxies():
+#	url = ""
+#	proxies = []
+#	# get the HTTP response and construct soup object
+#	soup = bs(requests.get(url).content, "html.parser")
+#	for row in soup.find("table", attrs={"id": "proxylisttable"}).find_all("tr")[1:]:
+#		tds = row.find_all("td")
+#		try:
+#			ip = tds[0].text.strip()
+#			port = tds[1].text.strip()
+#			host = f"{ip}:{port}"
+#			proxies.append(host)
+#		except IndexError:
+#			continue
+#	return proxies
 
-def get_session(proxies):
-	# construct an HTTP session
-	session = requests.Session()
-	# choose random proxies
-	proxy = random.choice(proxies)
-	session.proxies = {"http": proxy, "https": proxy}
-	return session
+def get_proxy():
+	url = "https://www.sslproxies.org/"
+	r = requests.get(url)
+	soup = bs(r.content, 'html5lib')
+	return {'https': random.choice(list(map(lambda x:x[0]+':'+x[1], list(zip(map(lambda x:x.text, soup.findAll('td')[::8]), 
+																	  map(lambda x:x.text, soup.findAll('td')[1::8]))))))}
 
-def get_valid_proxy(proxy_list): #format of items e.g. '128.2.198.188:3124'
-    g = Grab()
-    for proxy in proxy_list:
-        g.setup(proxy=proxy, proxy_type='http', connect_timeout=5, timeout=5)
+
+#def get_session(proxies):
+#	# construct an HTTP session
+#	session = requests.Session()
+#	# choose random proxies
+#	proxy = random.choice(proxies)
+#	session.proxies = {"http": proxy, "https": proxy}
+#	return session
+
+#def get_valid_proxy(proxy_list): #format of items e.g. '128.2.198.188:3124'
+#	g = Grab()
+#	for proxy in proxy_list:
+#		g.setup(proxy=proxy, proxy_type='http', connect_timeout=5, timeout=5)
+#		try:
+#			g.go('google.com')
+#		except GrabError:
+#			logging.info("Test error")
+#			pass
+#		else:
+#			yield proxy
+
+def proxy_request(request_type, url, **kwargs):
+    while 1:
         try:
-            g.go('google.com')
-        except GrabError:
-            logging.info("Test error")
-            pass
-        else:
-            yield proxy
+            proxy = get_proxy()
+            print("Using proxy: {}".format(proxy))
+            response = requests.request(request_type, url, proxies=proxy, timeout=5, **kwargs)
+            break
+        except Exception as e:
+            print(e)
+    return response
+
+
+
 
 def g():
 	n = 0
-	while n < (15):
-		s = get_session(actual_proxy_choices)
+	while n < (10):
 		t = datetime.datetime.now()
-		r = s.post(url =  URL+usernameid+URL2, headers = headers, data=data2)
-		print(s.get("http://icanhazip.com", timeout=1.5).text.strip())
+		r = proxy_request("post", URL+usernameid+URL2, headers = headers, data = data2)
 		if not r:
 			print(colored("REQUEST FAILED[{}]\n", "red").format(n))
 			print("Current Time =", t)
@@ -82,13 +102,15 @@ def g():
 			print("Current Time =", t)
 			break
 
-proxy_choices = get_free_proxies()
-actual_proxy_choices = get_valid_proxy(proxy_choices)
-print(proxy_choices)
+#proxy_choices = get_free_proxies()
+#actual_proxy_choices = get_valid_proxy(proxy_choices)
+#print(proxy_choices)
 
 ip_list = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
+
+
 
 #for q in range(100):
 
@@ -98,7 +120,7 @@ print(colored("Gathering proxies, this may take a while...", "cyan"))
 #	except Exception as e:
 #		continue
 #	ip_list.append(ip)
-
+#
 #filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
 
 #print(filtered_ip_list)
@@ -155,7 +177,7 @@ headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
 data2 = json.dumps({"name": newname, "password":password})
 
 # sending get request and saving the response as response object 
-for request in range(100):
+for request in range(10):
 	threading.Thread(target=g).start()
 
 print(r.status_code, r.text)
