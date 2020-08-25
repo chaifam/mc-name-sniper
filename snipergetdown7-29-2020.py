@@ -91,7 +91,7 @@ def g():
 	n = 0
 	while n < (10):
 		t = datetime.datetime.now()
-		r = proxy_request("post", URL+usernameid+URL2, headers = headers, data = data2)
+		r = requests.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = ip_list)
 		if not r:
 			print(colored("REQUEST FAILED[{}]\n", "red").format(n))
 			print("Current Time =", t)
