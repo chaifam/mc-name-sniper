@@ -77,12 +77,12 @@ def proxy_request(request_type, url, **kwargs):
     while 1:
         try:
             proxy = get_proxy()
-            print("Using proxy: {}".format(proxy))
-            response = requests.request(request_type, url, proxies=proxy, timeout=5, **kwargs)
+            response = requests.request(request_type, url, proxies=proxy, timeout=1.5, **kwargs)
             break
         except Exception as e:
-            print(e)
-    return response
+            pass
+    print("Using proxy: {}".format(proxy))
+    return proxy
 
 
 
@@ -102,6 +102,10 @@ def g():
 			print("Current Time =", t)
 			break
 
+def get_proxy_list(l):	
+	l.append(proxy_request("get", "https://youtube.com"))
+	
+
 #proxy_choices = get_free_proxies()
 #actual_proxy_choices = get_valid_proxy(proxy_choices)
 #print(proxy_choices)
@@ -110,7 +114,10 @@ ip_list = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
+for b in range(10):
+	threading.Thread(target=get_proxy_list(ip_list)).start()
 
+print(ip_list)
 
 #for q in range(100):
 
