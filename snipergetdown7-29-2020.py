@@ -81,7 +81,6 @@ def proxy_request(request_type, url, **kwargs):
             break
         except Exception as e:
             pass
-    print("Using proxy: {}".format(proxy))
     return proxy
 
 
@@ -91,7 +90,7 @@ def g():
 	n = 0
 	while n < (10):
 		t = datetime.datetime.now()
-		r = requests.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = ip_list)
+		r = requests.get(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = ip_list)
 		if not r:
 			print(colored("REQUEST FAILED[{}]\n", "red").format(n))
 			print("Current Time =", t)
@@ -103,34 +102,45 @@ def g():
 			break
 
 def get_proxy_list(l):	
-	l.append(proxy_request("get", "https://youtube.com"))
+	while True:
+		item = proxy_request("get", "https://youtube.com")
+		try:
+			if item not in l:
+				l.append(item)
+				print("Usining proxy: ", item)
+		except:
+			continue
+		else:
+			break
+
 	
 
 #proxy_choices = get_free_proxies()
 #actual_proxy_choices = get_valid_proxy(proxy_choices)
 #print(proxy_choices)
 
-ip_list = []
+proxyList = []
+test_list = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
 for b in range(10):
-	threading.Thread(target=get_proxy_list(ip_list)).start()
+	threading.Thread(target=get_proxy_list(proxyList)).start()
 
-print(ip_list)
+print(proxyList)
+# TESTING PURPOSES
+for q in range(10):
+	k = 0
+	try:
+		ip = requests.get("http://icanhazip.com", proxies = proxyList[k], timeout=1.5).text.strip()
+		k += 1
+	except Exception as e:
+		continue
+	test_list.append(ip)
 
-#for q in range(100):
-
-#	s = get_session(proxies)
-#	try:
-#		ip = s.get("http://icanhazip.com", timeout=1.5).text.strip()
-#	except Exception as e:
-#		continue
-#	ip_list.append(ip)
-#
 #filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
 
-#print(filtered_ip_list)
+print(test_list)
 
 
 a = 0
