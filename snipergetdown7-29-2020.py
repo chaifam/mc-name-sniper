@@ -120,7 +120,6 @@ def get_proxy_list(l):
 #print(proxy_choices)
 
 proxyList = []
-test_list = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
@@ -130,15 +129,15 @@ for b in range(10):
 print(proxyList)
 # TESTING PURPOSES
 for q in range(10):
+	test_dict = proxyList[q]
 	try:
-		ip = requests.get("http://icanhazip.com", proxies = proxyList[q], timeout=1.5).text.strip()
+		ip = requests.get("http://icanhazip.com", proxies = test_dict, timeout=1.5).text.strip()
 	except Exception as e:
 		continue
-	test_list.append(ip)
+	print(ip)
 
 #filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
 
-print(test_list)
 
 
 a = 0
