@@ -130,10 +130,8 @@ for b in range(10):
 print(proxyList)
 # TESTING PURPOSES
 for q in range(10):
-	k = 0
 	try:
-		ip = requests.get("http://icanhazip.com", proxies = proxyList[k], timeout=1.5).text.strip()
-		k += 1
+		ip = requests.get("http://icanhazip.com", proxies = proxyList[q], timeout=1.5).text.strip()
 	except Exception as e:
 		continue
 	test_list.append(ip)
