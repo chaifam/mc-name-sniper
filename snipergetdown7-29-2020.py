@@ -126,14 +126,13 @@ print(colored("Gathering proxies, this may take a while...", "cyan"))
 for b in range(10):
 	threading.Thread(target=get_proxy_dict(proxyList)).start()
 
+print(proxyList)
 # TESTING PURPOSES
 for dict_item in proxyList:
-	proxy = dict_item
 	try:
-		ip = requests.get("http://icanhazip.com", timeout=1.5, proxies = proxy).text.strip()
+		print(requests.get("https://httpbin.org/ip", timeout=1.5, proxies = dict_item).text.strip())
 	except Exception as e:
 		continue
-	print(ip)
 
 #filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
 
