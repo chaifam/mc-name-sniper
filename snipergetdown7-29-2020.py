@@ -54,26 +54,6 @@ def get_proxy():
 																	  map(lambda x:x.text, soup.findAll('td')[1::8]))))))}
 
 
-#def get_session(proxies):
-#	# construct an HTTP session
-#	session = requests.Session()
-#	# choose random proxies
-#	proxy = random.choice(proxies)
-#	session.proxies = {"http": proxy, "https": proxy}
-#	return session
-
-#def get_valid_proxy(proxy_list): #format of items e.g. '128.2.198.188:3124'
-#	g = Grab()
-#	for proxy in proxy_list:
-#		g.setup(proxy=proxy, proxy_type='http', connect_timeout=5, timeout=5)
-#		try:
-#			g.go('google.com')
-#		except GrabError:
-#			logging.info("Test error")
-#			pass
-#		else:
-#			yield proxy
-
 def proxy_request(request_type, url, **kwargs):
     while 1:
         try:
@@ -115,12 +95,6 @@ def get_proxy_dict(l):
 		else:
 			break
 
-	
-
-#proxy_choices = get_free_proxies()
-#actual_proxy_choices = get_valid_proxy(proxy_choices)
-#print(proxy_choices)
-
 proxyList = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
@@ -129,11 +103,6 @@ for b in range(50):
 	threading.Thread(target=get_proxy_dict(proxyList)).start()
 
 print(proxyList)
-# TESTING PURPOSES
-
-#filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
-
-
 
 a = 0
 
