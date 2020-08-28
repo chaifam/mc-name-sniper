@@ -101,13 +101,13 @@ def g():
 			print("Current Time =", t)
 			break
 
-def get_proxy_list(l):	
+def get_proxy_dict(l):	
 	while True:
 		item = proxy_request("get", "https://youtube.com")
 		try:
 			if item not in l:
 				l.append(item)
-				print("Usining proxy: ", item)
+				print("Using proxy: ", item)
 		except:
 			continue
 		else:
@@ -124,14 +124,13 @@ proxyList = []
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
 for b in range(10):
-	threading.Thread(target=get_proxy_list(proxyList)).start()
+	threading.Thread(target=get_proxy_dict(proxyList)).start()
 
-print(proxyList)
 # TESTING PURPOSES
-for q in range(10):
-	test_dict = proxyList[q]
+for dict_item in proxyList:
+	proxy = dict_item
 	try:
-		ip = requests.get("http://icanhazip.com", proxies = test_dict, timeout=1.5).text.strip()
+		ip = requests.get("http://icanhazip.com", timeout=1.5, proxies = proxy).text.strip()
 	except Exception as e:
 		continue
 	print(ip)
