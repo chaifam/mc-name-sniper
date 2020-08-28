@@ -88,19 +88,18 @@ def proxy_request(request_type, url, **kwargs):
 
 def g():
 	n = 0
-	for dict_item in proxyList:
-		for n in range(10):
-			t = datetime.datetime.now()
-			r = requests.get(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
-			if not r:
-				print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
-				print("Current Time =", t)
-				n += 1
-			else:
-				print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
-				print("You got the name!\n")
-				print("Current Time =", t)
-				break
+	for n in range(10):
+		t = datetime.datetime.now()
+		r = requests.get(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
+		if not r:
+			print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
+			print("Current Time =", t)
+			n += 1
+		else:
+			print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
+			print("You got the name!\n")
+			print("Current Time =", t)
+			break
 
 
 def get_proxy_dict(l):	
@@ -186,7 +185,7 @@ headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
 data2 = json.dumps({"name": newname, "password":password})
 
 # sending get request and saving the response as response object 
-for request in range(10):
+for dict_item in proxyList:
 	threading.Thread(target=g).start()
 
 print(r.status_code, r.text)
