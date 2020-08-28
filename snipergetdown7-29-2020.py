@@ -189,8 +189,8 @@ data2 = json.dumps({"name": newname, "password":password})
 for dict_item in proxyList:
 	threading.Thread(target=g).start()
 
-print(r.status_code, r.text)
 time1 = time.perf_counter();
 timetoprocess = str(time1-time0)
 print("the sniper shot (2/2), it took " + timetoprocess + " seconds to send the requests!") 
+sys.exit()
 # program has successfully executed. go check your account!
