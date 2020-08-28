@@ -88,18 +88,20 @@ def proxy_request(request_type, url, **kwargs):
 
 def g():
 	n = 0
-	while n < (10):
-		t = datetime.datetime.now()
-		r = requests.get(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = ip_list)
-		if not r:
-			print(colored("REQUEST FAILED[{}]\n", "red").format(n))
-			print("Current Time =", t)
-			n += 1
-		else:
-			print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(n))
-			print("You got the name!\n")
-			print("Current Time =", t)
-			break
+	for dict_item in proxyList:
+		for n in range(10):
+			t = datetime.datetime.now()
+			r = requests.get(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
+			if not r:
+				print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
+				print("Current Time =", t)
+				n += 1
+			else:
+				print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
+				print("You got the name!\n")
+				print("Current Time =", t)
+				break
+
 
 def get_proxy_dict(l):	
 	while True:
@@ -123,16 +125,11 @@ proxyList = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
-for b in range(10):
+for b in range(50):
 	threading.Thread(target=get_proxy_dict(proxyList)).start()
 
 print(proxyList)
 # TESTING PURPOSES
-for dict_item in proxyList:
-	try:
-		print(requests.get("https://httpbin.org/ip", timeout=1.5, proxies = dict_item).text.strip())
-	except Exception as e:
-		continue
 
 #filtered_ip_list = [ip for ip in ip_list if ip != "Backend not available"]
 
