@@ -1,4 +1,4 @@
-# importing apis
+# importing modules
 import requests 
 import random
 import json
@@ -7,7 +7,6 @@ import datetime
 import time
 import threading
 import sys
-from grab import Grab, GrabError
 from colorama import init
 from bs4 import BeautifulSoup as bs
 from termcolor import colored
