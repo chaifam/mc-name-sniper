@@ -29,29 +29,12 @@ def rightNowTime():
 	now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
 	return str(now)
 
-#def get_free_proxies():
-#	url = ""
-#	proxies = []
-#	# get the HTTP response and construct soup object
-#	soup = bs(requests.get(url).content, "html.parser")
-#	for row in soup.find("table", attrs={"id": "proxylisttable"}).find_all("tr")[1:]:
-#		tds = row.find_all("td")
-#		try:
-#			ip = tds[0].text.strip()
-#			port = tds[1].text.strip()
-#			host = f"{ip}:{port}"
-#			proxies.append(host)
-#		except IndexError:
-#			continue
-#	return proxies
-
 def get_proxy():
 	url = "https://www.sslproxies.org/"
 	r = requests.get(url)
 	soup = bs(r.content, 'html5lib')
 	return {'https': random.choice(list(map(lambda x:x[0]+':'+x[1], list(zip(map(lambda x:x.text, soup.findAll('td')[::8]), 
 																	  map(lambda x:x.text, soup.findAll('td')[1::8]))))))}
-
 
 def proxy_request(request_type, url, **kwargs):
     while 1:
@@ -62,9 +45,6 @@ def proxy_request(request_type, url, **kwargs):
         except Exception as e:
             pass
     return proxy
-
-
-
 
 def g():
 	n = 0
@@ -80,7 +60,6 @@ def g():
 			print("You got the name!\n")
 			print("Current Time =", t)
 			sys.exit()
-
 
 def get_proxy_dict(l):	
 	while True:
