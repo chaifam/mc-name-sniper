@@ -6,6 +6,7 @@ import ntplib
 import datetime
 import time
 import threading
+import sys
 from grab import Grab, GrabError
 from colorama import init
 from bs4 import BeautifulSoup as bs
@@ -99,7 +100,7 @@ def g():
 			print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
 			print("You got the name!\n")
 			print("Current Time =", t)
-			break
+			sys.exit()
 
 
 def get_proxy_dict(l):	
