@@ -47,14 +47,12 @@ def proxy_request(request_type, url, **kwargs):
     return proxy
 
 def g():
-	n = 0
-	for n in range(10):
+	for dict_item in proxyList:
 		t = datetime.datetime.now()
 		r = requests.get(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
 		if not r:
 			print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
 			print("Current Time =", t)
-			n += 1
 		else:
 			print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
 			print("You got the name!\n")
@@ -94,10 +92,9 @@ average_ping = a/10
 print("Average ping to Mojang servers: {} \n".format(average_ping))
 
 
-	
+username = input("Enter your current name:\n").strip()	
 newname = input("Enter the name you want to snipe: \n").strip()
 password = input("Enter your Mojang password:\n").strip()
-username = input("Enter your username:\n").strip()
 AT = input("Enter your Bearer Token\n")
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
@@ -119,7 +116,7 @@ total_seconds = time_delta.total_seconds()
 clock = total_seconds/60
 result = str(datetime.timedelta(minutes=clock))
 print("{} till snipe".format(result))
-time.sleep(total_seconds - average_ping)
+time.sleep(total_seconds - 8)
 print("The sniper scopes in (1/2)") #tells you first part of program working
 
 
@@ -133,7 +130,7 @@ headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
 data2 = json.dumps({"name": newname, "password":password})
 
 # sending get request and saving the response as response object 
-for dict_item in proxyList:
+for n in range(10):
 	threading.Thread(target=g).start()
 
 time1 = time.perf_counter();
