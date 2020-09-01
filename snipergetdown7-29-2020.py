@@ -71,26 +71,29 @@ def get_proxy_dict(l):
 		else:
 			break
 
-proxyList = []
-
-print(colored("Gathering proxies, this may take a while...", "cyan"))
-
-for b in range(50):
-	threading.Thread(target=get_proxy_dict(proxyList)).start()
-
-print(proxyList)
-
-a = 0
-
-for i in range(10):
-	pingteststart = time.perf_counter()
-	pingtest = requests.post(url = "https://api.mojang.com/user/profile/24c182c6716b47c68f60a1be9045c449/name") 
-	pingtestend = time.perf_counter()
-	a += (pingtestend - pingteststart)
-	print(pingtestend-pingteststart)
-average_ping = a/10
-print("Average ping to Mojang servers: {} \n".format(average_ping))
-
+def scheduler():
+	now = rightNowTime()
+	time1_str = (now[:23])
+	time2_str = (date_entry + " " + time_entry)
+	time1 = datetime.datetime.strptime(time1_str, '%Y-%m-%d %H:%M:%S.%f')
+	time2 = datetime.datetime.strptime(time2_str, '%Y-%m-%d %H:%M:%S')
+	print("The current time is: {}".format(time1))
+	print("The goal time is: {}".format(time2))
+	timeDiff = (time2 - time1)
+	seconds = timeDiff.total_seconds()
+	businessTime = seconds/60
+	totalMinutes = str(datetime.timedelta(minutes=businessTime))
+	print("{} till snipe".format(totalMinutes))
+	if seconds > 1800:
+		wait = seconds - 1800
+		print(colored("Good for you for planning ahead!", "yellow"))
+		time.sleep(wait)
+	elif seconds <= 1800:
+		print(colored("I could use a little more notice...", "purple"))
+		pass
+	else:
+		print(colored("You are too late. You don't even deserve a special color."))
+		sys.exit()
 
 username = input("Enter your current name:\n").strip()	
 newname = input("Enter the name you want to snipe: \n").strip()
@@ -98,6 +101,29 @@ password = input("Enter your Mojang password:\n").strip()
 AT = input("Enter your Bearer Token\n")
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
+
+scheduler()
+
+proxyList = []
+
+print(colored("Gathering proxies, this may take a while...", "cyan"))
+
+for b in range(15):
+	threading.Thread(target=get_proxy_dict(proxyList)).start()
+
+print(proxyList)
+
+a = 0
+
+#for i in range(10):
+#	pingteststart = time.perf_counter()
+#	pingtest = requests.post(url = "https://api.mojang.com/user/profile/24c182c6716b47c68f60a1be9045c449/name") 
+#	pingtestend = time.perf_counter()
+#	a += (pingtestend - pingteststart)
+#	print(pingtestend-pingteststart)
+#average_ping = a/10
+#print("Average ping to Mojang servers: {} \n".format(average_ping))
+
 
 usernameidreq = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
 jsonusernameid = usernameidreq.json()
