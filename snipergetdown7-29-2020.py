@@ -7,6 +7,7 @@ import datetime
 import time
 import threading
 import sys
+from configparser import ConfigParser
 from colorama import init
 from bs4 import BeautifulSoup as bs
 from termcolor import colored
@@ -17,6 +18,11 @@ from pytz import timezone
 
 init()
 
+file = "config.ini"
+config = ConfigParser()
+config.read(file)
+
+print(config.sections())
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 
@@ -106,21 +112,22 @@ def scheduler():
 	businessTime = seconds/60
 	totalMinutes = str(datetime.timedelta(minutes=businessTime))
 	print("{} till snipe".format(totalMinutes))
-	if seconds > 1800:
-		wait = seconds - 1800
+	if seconds > 3540:
+		wait = seconds - 3540
 		print(colored("Good for you for planning ahead!", "yellow"))
 		time.sleep(wait)
-	elif seconds <= 1800:
+	elif seconds <= 3540:
 		print(colored("I could use a little more notice...", "purple"))
 		pass
 	else:
 		print(colored("You are too late. You don't even deserve a special color."))
 		sys.exit()
 
-username = input("Enter your current name:\n").strip()	
-email = input("Enter your account email:\n").strip()	
+username = config["client"]["name"]	
+email = config["client"]["email"]	
 newname = input("Enter the name you want to snipe: \n").strip()
-password = input("Enter your Mojang password:\n").strip()
+password = config["client"]["password"]
+print(email, username, password)
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
 
