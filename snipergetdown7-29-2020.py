@@ -18,9 +18,11 @@ from pytz import timezone
 
 init()
 
-print(os.getcwd())
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
-with open("C:/Users/justi/Documents/GitHub/mc-name-sniper/config.json", "r") as f:
+os.chdir(dir_path)
+
+with open("config.json", "r") as f:
     config = json.load(f)
 print(config["email"])
 
