@@ -14,7 +14,9 @@ from datetime import timedelta
 from time import ctime
 from pytz import timezone
 
+
 init()
+
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 
@@ -116,11 +118,20 @@ def scheduler():
 		sys.exit()
 
 username = input("Enter your current name:\n").strip()	
+email = input("Enter your account email:\n").strip()	
 newname = input("Enter the name you want to snipe: \n").strip()
 password = input("Enter your Mojang password:\n").strip()
-AT = input("Enter your Bearer Token\n")
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
+
+#gets access token from mojangs authentication servers using mikis huge brain
+jsonForAT = json.dumps({"agent":{"name":"Minecraft","version":1},"username":email,"password":password,"clientToken":""})
+headersForAT = {'Content-Type': 'application/json'}
+requestForAT = requests.post('https://authserver.mojang.com/authenticate', data=jsonForAT, headers=headersForAT)
+
+pullATRequestData = requestForAT.json()
+AT = pullATRequestData["accessToken"]
+print("Your access token is "+AT+" lol not that you care")
 
 scheduler()
 
