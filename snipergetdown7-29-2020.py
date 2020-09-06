@@ -67,7 +67,7 @@ def spamMojang():
 		session.proxies = proxy
 		s = session
 		t = datetime.datetime.now()
-		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
+		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2)
 		if not r:
 			print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
 			print("Current Time =", t)
