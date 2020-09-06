@@ -69,6 +69,20 @@ def getSession(proxies):
 
 #framework for sending requests through proxies
 def spamMojang():
+	#gets access token from mojangs authentication servers using mikis huge brain
+	jsonForAT = json.dumps({"agent":{"name":"Minecraft","version":1},"username":email,"password":password,"clientToken":""})
+	headersForAT = {'Content-Type': 'application/json'}
+	requestForAT = requests.post('https://authserver.mojang.com/authenticate', data=jsonForAT, headers=headersForAT)
+
+	pullATRequestData = requestForAT.json()
+	AT = pullATRequestData["accessToken"]
+	print("Your access token is "+AT+" lol not that you care")
+	# setting up url to change name 
+	time0 = time.perf_counter();
+	URL = "https://api.mojang.com/user/profile/"
+	URL2 = "/name"  
+	headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
+	data2 = json.dumps({"name": newname, "password":password})
 	for dict_item in proxyList:
 		# construct an HTTP session
 		session = requests.Session()
@@ -136,15 +150,6 @@ print(email)
 print(password)
 print(newname)
 
-#gets access token from mojangs authentication servers using mikis huge brain
-jsonForAT = json.dumps({"agent":{"name":"Minecraft","version":1},"username":email,"password":password,"clientToken":""})
-headersForAT = {'Content-Type': 'application/json'}
-requestForAT = requests.post('https://authserver.mojang.com/authenticate', data=jsonForAT, headers=headersForAT)
-
-pullATRequestData = requestForAT.json()
-print(pullATRequestData)
-AT = pullATRequestData["accessToken"]
-print("Your access token is "+AT+" lol not that you care")
 
 scheduler()
 
@@ -192,12 +197,7 @@ print("The sniper scopes in (1/2)") #tells you first part of program working
 
 
 
-# setting up url to change name 
-time0 = time.perf_counter();
-URL = "https://api.mojang.com/user/profile/"
-URL2 = "/name"  
-headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
-data2 = json.dumps({"name": newname, "password":password})
+
 
 # sending get request and saving the response as response object 
 for n in range(10):
