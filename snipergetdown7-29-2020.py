@@ -29,27 +29,30 @@ def rightNowTime():
 	now = datetime.datetime.fromtimestamp(response.tx_time, eastern)
 	return str(now)
 
-def get_proxy():
+#pulls proxies from list of online proxies
+def pullProxyList():
 	url = "https://www.sslproxies.org/"
 	r = requests.get(url)
 	soup = bs(r.content, 'html5lib')
 	return {'https': random.choice(list(map(lambda x:x[0]+':'+x[1], list(zip(map(lambda x:x.text, soup.findAll('td')[::8]), 
 																	  map(lambda x:x.text, soup.findAll('td')[1::8]))))))}
 
-def proxy_request(request_type, url, **kwargs):
+#framework to send proxy requests 1 by 1
+def sendProxyRequest(request_type, url, **kwargs):
     while 1:
         try:
-            proxy = get_proxy()
+            proxy = pullProxyList()
             response = requests.request(request_type, url, proxies=proxy, timeout=1.5, **kwargs)
             break
         except Exception as e:
             pass
     return proxy
 
-def g():
+#framework for sending requests through proxies
+def spamMojang():
 	for dict_item in proxyList:
 		t = datetime.datetime.now()
-		r = requests.get(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
+		r = requests.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
 		if not r:
 			print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
 			print("Current Time =", t)
@@ -59,9 +62,10 @@ def g():
 			print("Current Time =", t)
 			sys.exit()
 
-def get_proxy_dict(l):	
+#tests each proxy and adds it to a dictionary
+def makeProxyDict(l):	
 	while True:
-		item = proxy_request("get", "https://youtube.com")
+		item = sendProxyRequest("get", "https://youtube.com")
 		try:
 			if item not in l:
 				l.append(item)
@@ -71,6 +75,7 @@ def get_proxy_dict(l):
 		else:
 			break
 
+#sets times for program to sleep and wake up in order to snipe the name at the right time
 def scheduler():
 	now = rightNowTime()
 	time1_str = (now[:23])
@@ -109,7 +114,7 @@ proxyList = []
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
 for b in range(15):
-	threading.Thread(target=get_proxy_dict(proxyList)).start()
+	threading.Thread(target=makeProxyDict(proxyList)).start()
 
 print(proxyList)
 
@@ -157,7 +162,7 @@ data2 = json.dumps({"name": newname, "password":password})
 
 # sending get request and saving the response as response object 
 for n in range(10):
-	threading.Thread(target=g).start()
+	threading.Thread(target=spamMojang).start()
 
 time1 = time.perf_counter();
 timetoprocess = str(time1-time0)
