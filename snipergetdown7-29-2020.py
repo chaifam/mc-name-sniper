@@ -66,16 +66,16 @@ def spamMojang():
 		proxy = dict_item
 		session.proxies = proxy
 		s = session
-			t = datetime.datetime.now()
-			r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
-			if not r:
-				print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
-				print("Current Time =", t)
-			else:
-				print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
-				print("You got the name!\n")
-				print("Current Time =", t)
-				sys.exit()
+		t = datetime.datetime.now()
+		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
+		if not r:
+			print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
+			print("Current Time =", t)
+		else:
+			print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
+			print("You got the name!\n")
+			print("Current Time =", t)
+			sys.exit()
 
 #tests each proxy and adds it to a dictionary
 def makeProxyDict(l):	
