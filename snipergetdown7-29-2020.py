@@ -61,13 +61,13 @@ def getSession(proxies):
 def spamMojang():
 	for dict_item in proxyList:
 		# construct an HTTP session
-    	session = requests.Session()
+		session = requests.Session()
 		# choose one random proxy
 		proxy = dict_item
 		session.proxies = proxy
 		s = session
 		t = datetime.datetime.now()
-		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2)
+		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, timeout = 5)
 		if not r:
 			print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
 			print("Current Time =", t)
