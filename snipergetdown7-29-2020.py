@@ -19,7 +19,7 @@ init()
 
 config = open("config.json", "r")
 json.parse(config)
-print(config["email"])s
+print(config["email"])
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 
