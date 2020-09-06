@@ -23,8 +23,8 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(dir_path)
 
 with open("config.json", "r") as f:
-    config = json.load(f)
-print(config["email"])
+	config = json.load(f)
+
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 
@@ -125,13 +125,16 @@ def scheduler():
 		print(colored("You are too late. You don't even deserve a special color."))
 		sys.exit()
 
-username = config["client"]["name"]	
-email = config["client"]["email"]	
+username = config["name"]	
+email = config["email"]	
+password = config["password"]
 newname = input("Enter the name you want to snipe: \n").strip()
-password = config["client"]["password"]
-print(email, username, password)
 date_entry = input('Enter the date the name becomes available in YYYY-MM-DD format:\n').strip()
 time_entry = input("Enter the time of day the name becomes available in HH:MM:SS format:\n").strip()
+print(username)
+print(email)
+print(password)
+print(newname)
 
 #gets access token from mojangs authentication servers using mikis huge brain
 jsonForAT = json.dumps({"agent":{"name":"Minecraft","version":1},"username":email,"password":password,"clientToken":""})
