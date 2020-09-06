@@ -48,19 +48,34 @@ def sendProxyRequest(request_type, url, **kwargs):
             pass
     return proxy
 
+# creates session item to make program better
+def getSession(proxies):
+    # construct an HTTP session
+    session = requests.Session()
+    # choose one random proxy
+    proxy = random.choice(proxies)
+    session.proxies = {"http": proxy, "https": proxy}
+    return session
+
 #framework for sending requests through proxies
 def spamMojang():
 	for dict_item in proxyList:
-		t = datetime.datetime.now()
-		r = requests.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
-		if not r:
-			print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
-			print("Current Time =", t)
-		else:
-			print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
-			print("You got the name!\n")
-			print("Current Time =", t)
-			sys.exit()
+		# construct an HTTP session
+    	session = requests.Session()
+		# choose one random proxy
+		proxy = dict_item
+		session.proxies = proxy
+		s.session
+			t = datetime.datetime.now()
+			r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
+			if not r:
+				print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
+				print("Current Time =", t)
+			else:
+				print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
+				print("You got the name!\n")
+				print("Current Time =", t)
+				sys.exit()
 
 #tests each proxy and adds it to a dictionary
 def makeProxyDict(l):	
