@@ -119,7 +119,7 @@ def scheduler():
 		print(colored("Good for you for planning ahead!", "yellow"))
 		time.sleep(wait)
 	elif seconds <= 3540:
-		print(colored("I could use a little more notice...", "purple"))
+		print(colored("I could use a little more notice...", "magenta"))
 		pass
 	else:
 		print(colored("You are too late. You don't even deserve a special color."))
@@ -142,6 +142,7 @@ headersForAT = {'Content-Type': 'application/json'}
 requestForAT = requests.post('https://authserver.mojang.com/authenticate', data=jsonForAT, headers=headersForAT)
 
 pullATRequestData = requestForAT.json()
+print(pullATRequestData)
 AT = pullATRequestData["accessToken"]
 print("Your access token is "+AT+" lol not that you care")
 
