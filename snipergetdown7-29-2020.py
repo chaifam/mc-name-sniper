@@ -65,7 +65,7 @@ def spamMojang():
 		# choose one random proxy
 		proxy = dict_item
 		session.proxies = proxy
-		s.session
+		s = session
 			t = datetime.datetime.now()
 			r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, proxies = dict_item)
 			if not r:
