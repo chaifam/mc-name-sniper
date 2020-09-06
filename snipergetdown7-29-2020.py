@@ -7,6 +7,7 @@ import datetime
 import time
 import threading
 import sys
+import os
 from colorama import init
 from bs4 import BeautifulSoup as bs
 from termcolor import colored
@@ -17,8 +18,10 @@ from pytz import timezone
 
 init()
 
-config = open("config.json", "r")
-json.parse(config)
+print(os.getcwd())
+
+with open("C:/Users/justi/Documents/GitHub/mc-name-sniper/config.json", "r") as f:
+    config = json.load(f)
 print(config["email"])
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
