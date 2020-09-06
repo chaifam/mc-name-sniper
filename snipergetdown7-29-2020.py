@@ -7,7 +7,6 @@ import datetime
 import time
 import threading
 import sys
-from configparser import ConfigParser
 from colorama import init
 from bs4 import BeautifulSoup as bs
 from termcolor import colored
@@ -18,11 +17,9 @@ from pytz import timezone
 
 init()
 
-file = "config.ini"
-config = ConfigParser()
-config.read(file)
-
-print(config.sections())
+config = open("config.json", "r")
+json.parse(config)
+print(config["email"])s
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 
