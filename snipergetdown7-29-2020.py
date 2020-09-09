@@ -212,7 +212,7 @@ total_seconds = time_delta.total_seconds()
 clock = total_seconds/60
 result = str(datetime.timedelta(minutes=clock))
 print("{} till snipe".format(result))
-time.sleep(total_seconds - 60)
+time.sleep(total_seconds - 6)
 print("The sniper scopes in (1/2)") #tells you first part of program working
 
 time0 = time.perf_counter()
