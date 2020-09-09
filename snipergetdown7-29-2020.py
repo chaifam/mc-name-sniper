@@ -139,11 +139,13 @@ def spamMojang():
 		t = datetime.datetime.now()
 		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, timeout = 5)
 		if not r:
-			print(colored("REQUEST FAILED[{}]", "red").format(dict_item))
-			print("Current time is: {}".format(t))
+			str1 = colored("REQUEST FAILED[{}]", "red").format(dict_item)
+			str2 = colored(t, "cyan")
+			print(str1 + " @ " + str2)
 		else:
-			print(colored("REQUEST SUCCESSFUL[{}]" + t, "green").format(dict_item))
-			print("Current time is: {}".format(t))
+			str1 = colored("REQUEST SUCCESSFUL[{}]", "green").format(dict_item)
+			str2 = colored(t, "cyan")
+			print(str1 + " @ " + str2)
 			sys.exit()
 
 username = config["name"]	
@@ -164,7 +166,6 @@ proxyList = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
-proxyThreads = []
 
 t1 = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -212,13 +213,13 @@ total_seconds = time_delta.total_seconds()
 clock = total_seconds/60
 result = str(datetime.timedelta(minutes=clock))
 print("{} till snipe".format(result))
-time.sleep(total_seconds - 6)
+time.sleep(total_seconds - 2)
 print("The sniper scopes in (1/2)") #tells you first part of program working
 
 time0 = time.perf_counter()
 
 # sending get request and saving the response as response object 
-with concurrent.futures.ThreadPoolExecutor() as executor:
+with concurrent.futures.ProcessPoolExecutor() as executor:
 	for n in range(10):
 		executor.map(spamMojang())
 
