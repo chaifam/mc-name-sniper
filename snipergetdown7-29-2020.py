@@ -81,7 +81,7 @@ def makeProxyDict(l):
 		try:
 			if item not in l:
 				l.append(item)
-				print(item, "\n")
+				print(item)
 		except:
 			continue
 		else:
@@ -127,30 +127,40 @@ def scheduler():
 		print(colored("You are too late. You don't even deserve a special color."))
 		sys.exit()
 
+def sniperBullet(plist):
+	# construct an HTTP session
+	session = requests.Session()
+	# choose one random proxy
+	session.proxy = plist
+	s = session
+	t = datetime.datetime.now()
+	r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, timeout = 5)
+	if not r:
+		str1 = colored("REQUEST FAILED[{}]", "red").format(plist)
+		str2 = colored(t, "cyan")
+		return str1 + " @ " + str2 + "\n"
+	else:
+		str1 = colored("REQUEST SUCCESSFUL[{}]", "green").format(plist)
+		str2 = colored(t, "cyan")
+		return str1 + " @ " + str2 + "\n"
+		sys.exit()
+
 #framework for sending requests through proxies
 def spamMojang():
 	# setting up url to change name 
+	global URL
 	URL = "https://api.mojang.com/user/profile/"
-	URL2 = "/name"  
+	global URL2
+	URL2 = "/name"
+	global headers  
 	headers = {"Authorization": "Bearer "+ accessToken, 'User-Agent': useragent}
+	global data2
 	data2 = json.dumps({"name": newname, "password":password})
-	for dict_item in proxyList:
-		# construct an HTTP session
-		session = requests.Session()
-		# choose one random proxy
-		session.proxy = dict_item
-		s = session
-		t = datetime.datetime.now()
-		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, timeout = 5)
-		if not r:
-			str1 = colored("REQUEST FAILED[{}]", "red").format(dict_item)
-			str2 = colored(t, "cyan")
-			print(str1 + " @ " + str2)
-		else:
-			str1 = colored("REQUEST SUCCESSFUL[{}]", "green").format(dict_item)
-			str2 = colored(t, "cyan")
-			print(str1 + " @ " + str2)
-			sys.exit()
+	with concurrent.futures.ThreadPoolExecutor() as executor:
+		spamResults = executor.map(sniperBullet, proxyList)
+		for spamResult in spamResults:
+			print(spamResult)
+	
 
 username = config["name"]	
 email = config["email"]	
@@ -173,32 +183,14 @@ print(colored("Gathering proxies, this may take a while...", "cyan"))
 
 t1 = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor() as executor:
-	results = [executor.submit(makeProxyDict, proxyList) for _ in range(10)]
+	results = [executor.submit(makeProxyDict, proxyList) for _ in range(20)]
 t2 = time.perf_counter()
 proxyTime = t2-t1
 print(f"It took {proxyTime} seconds to gather proxies.")
 
-#for _ in range(10):
-#	t = threading.Thread(target=makeProxyDict, args=[proxyList])
-#	t.start()
-#	proxyThreads.append(t)
-
-#for proxyThread in proxyThreads:
-#	proxyThread.join()
-
 print(proxyList)
 
 a = 0
-
-#for i in range(10):
-#	pingteststart = time.perf_counter()
-#	pingtest = requests.post(url = "https://api.mojang.com/user/profile/24c182c6716b47c68f60a1be9045c449/name") 
-#	pingtestend = time.perf_counter()
-#	a += (pingtestend - pingteststart)
-#	print(pingtestend-pingteststart)
-#average_ping = a/10
-#print("Average ping to Mojang servers: {} \n".format(average_ping))
-
 
 usernameidreq = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
 jsonusernameid = usernameidreq.json()
@@ -217,15 +209,16 @@ total_seconds = time_delta.total_seconds()
 clock = total_seconds/60
 result = str(datetime.timedelta(minutes=clock))
 print("{} till snipe".format(result))
-time.sleep(total_seconds - 5)
 print("The sniper scopes in (1/2)") #tells you first part of program working
+time.sleep(total_seconds - 5)
+
 
 time0 = time.perf_counter()
 
 # sending get request and saving the response as response object 
 with concurrent.futures.ProcessPoolExecutor() as executor:
 	numberRequests = round(600/len(proxyList))
-	for n in range(numberRequests):
+	for n in range(numberRequests):	
 		executor.map(spamMojang())
 
 #for n in range(10):
