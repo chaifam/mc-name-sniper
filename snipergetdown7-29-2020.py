@@ -113,13 +113,13 @@ def scheduler():
 	totalMinutes = str(datetime.timedelta(minutes=businessTime))
 	print("{} till snipe".format(totalMinutes))
 	global accessToken
-	if seconds > 300:
-		wait = seconds - 300
+	if seconds > 180:
+		wait = seconds - 180
 		print(colored("Good for you for planning ahead!", "yellow"))
 		time.sleep(wait)
 		accessToken = getAT()
 
-	elif seconds <= 300:
+	elif seconds <= 180:
 		print(colored("I could use a little more notice...", "magenta"))
 		accessToken = getAT()
 		pass
@@ -138,6 +138,7 @@ def sniperBullet(plist):
 	if not r:
 		str1 = colored("REQUEST FAILED[{}]", "red").format(plist)
 		str2 = colored(t, "cyan")
+		print(r.text)
 		return str1 + " @ " + str2 + "\n"
 	else:
 		str1 = colored("REQUEST SUCCESSFUL[{}]", "green").format(plist)
