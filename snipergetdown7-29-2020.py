@@ -41,23 +41,27 @@ def rightNowTime():
 	return str(now)
 
 #pulls proxies from list of online proxies
-def pullProxyList():
-	url = "https://www.sslproxies.org/"
+def pullProxyList(proxyUrl):
+	url = proxyUrl
 	r = requests.get(url)
 	soup = bs(r.content, 'html5lib')
 	return {'https': random.choice(list(map(lambda x:x[0]+':'+x[1], list(zip(map(lambda x:x.text, soup.findAll('td')[::8]), 
-																	  map(lambda x:x.text, soup.findAll('td')[1::8]))))))}
+																		  map(lambda x:x.text, soup.findAll('td')[1::8]))))))}
 
 #framework to send proxy requests 1 by 1
 def proxyTest(request_type, url, **kwargs):
 	while True:
 		try:
-			proxy = pullProxyList()
-			response = requests.request(request_type, url, proxies=proxy, timeout=1.5, **kwargs)
-			break
+			with concurrent.futures.ThreadPoolExecutor() as executor:	
+				urls = ["https://free-proxy-list.net/", "https://www.sslproxies.org/"]
+				results = [executor.submit(pullProxyList, url) for url in urls]
+				for f in concurrent.futures.as_completed(results):
+					proxy = f.result()
+				response = requests.request(request_type, url, proxies=proxy, timeout=1.5, **kwargs)
+				break
 		except Exception as e:
-			pass
-	return proxy
+				pass
+		return proxy
 
 # creates session item to make program better
 def getSession(proxies):
@@ -77,7 +81,7 @@ def makeProxyDict(l):
 		try:
 			if item not in l:
 				l.append(item)
-				print("Using proxy: ", item)
+				print(item, "\n")
 		except:
 			continue
 		else:
@@ -220,7 +224,8 @@ time0 = time.perf_counter()
 
 # sending get request and saving the response as response object 
 with concurrent.futures.ProcessPoolExecutor() as executor:
-	for n in range(10):
+	numberRequests = round(600/len(proxyList))
+	for n in range(numberRequests):
 		executor.map(spamMojang())
 
 #for n in range(10):
