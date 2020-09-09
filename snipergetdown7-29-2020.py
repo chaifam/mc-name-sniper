@@ -8,6 +8,7 @@ import time
 import threading
 import sys
 import os
+import concurrent.futures
 from colorama import init
 from bs4 import BeautifulSoup as bs
 from termcolor import colored
@@ -48,63 +49,31 @@ def pullProxyList():
 																	  map(lambda x:x.text, soup.findAll('td')[1::8]))))))}
 
 #framework to send proxy requests 1 by 1
-def sendProxyRequest(request_type, url, **kwargs):
-    while 1:
-        try:
-            proxy = pullProxyList()
-            response = requests.request(request_type, url, proxies=proxy, timeout=1.5, **kwargs)
-            break
-        except Exception as e:
-            pass
-    return proxy
+def proxyTest(request_type, url, **kwargs):
+	while True:
+		try:
+			proxy = pullProxyList()
+			response = requests.request(request_type, url, proxies=proxy, timeout=1.5, **kwargs)
+			break
+		except Exception as e:
+			pass
+	return proxy
 
 # creates session item to make program better
 def getSession(proxies):
-    # construct an HTTP session
-    session = requests.Session()
-    # choose one random proxy
-    proxy = random.choice(proxies)
-    session.proxies = {"http": proxy, "https": proxy}
-    return session
+	# construct an HTTP session
+	session = requests.Session()
+	# choose one random proxy
+	proxy = random.choice(proxies)
+	session.proxies = {"http": proxy, "https": proxy}
+	return session
 
-#framework for sending requests through proxies
-def spamMojang():
-	#gets access token from mojangs authentication servers using mikis huge brain
-	jsonForAT = json.dumps({"agent":{"name":"Minecraft","version":1},"username":email,"password":password,"clientToken":""})
-	headersForAT = {'Content-Type': 'application/json'}
-	requestForAT = requests.post('https://authserver.mojang.com/authenticate', data=jsonForAT, headers=headersForAT)
 
-	pullATRequestData = requestForAT.json()
-	AT = pullATRequestData["accessToken"]
-	print("Your access token is "+AT+" lol not that you care")
-	# setting up url to change name 
-	time0 = time.perf_counter();
-	URL = "https://api.mojang.com/user/profile/"
-	URL2 = "/name"  
-	headers = {"Authorization": "Bearer "+AT, 'User-Agent': useragent}
-	data2 = json.dumps({"name": newname, "password":password})
-	for dict_item in proxyList:
-		# construct an HTTP session
-		session = requests.Session()
-		# choose one random proxy
-		proxy = dict_item
-		session.proxies = proxy
-		s = session
-		t = datetime.datetime.now()
-		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, timeout = 5)
-		if not r:
-			print(colored("REQUEST FAILED[{}]\n", "red").format(dict_item))
-			print("Current Time =", t)
-		else:
-			print(colored("REQUEST SUCCESSFUL[{}]\n", "green").format(dict_item))
-			print("You got the name!\n")
-			print("Current Time =", t)
-			sys.exit()
 
 #tests each proxy and adds it to a dictionary
 def makeProxyDict(l):	
-	while True:
-		item = sendProxyRequest("get", "https://youtube.com")
+	item = proxyTest("get", "https://www.minecraft.net/en-us")
+	while True:	
 		try:
 			if item not in l:
 				l.append(item)
@@ -113,6 +82,17 @@ def makeProxyDict(l):
 			continue
 		else:
 			break
+
+def getAT():
+	#gets access token from mojangs authentication servers using mikis huge brain
+	jsonForAT = json.dumps({"agent":{"name":"Minecraft","version":1},"username":email,"password":password,"clientToken":""})
+	headersForAT = {'Content-Type': 'application/json'}
+	requestForAT = requests.post('https://authserver.mojang.com/authenticate', data=jsonForAT, headers=headersForAT)
+
+	pullATRequestData = requestForAT.json()
+	AT = pullATRequestData["accessToken"]
+	print("Your access token is "+AT+" lol not that you care")
+	return AT
 
 #sets times for program to sleep and wake up in order to snipe the name at the right time
 def scheduler():
@@ -128,16 +108,43 @@ def scheduler():
 	businessTime = seconds/60
 	totalMinutes = str(datetime.timedelta(minutes=businessTime))
 	print("{} till snipe".format(totalMinutes))
-	if seconds > 3540:
-		wait = seconds - 3540
+	global accessToken
+	if seconds > 300:
+		wait = seconds - 300
 		print(colored("Good for you for planning ahead!", "yellow"))
 		time.sleep(wait)
-	elif seconds <= 3540:
+		accessToken = getAT()
+
+	elif seconds <= 300:
 		print(colored("I could use a little more notice...", "magenta"))
+		accessToken = getAT()
 		pass
 	else:
 		print(colored("You are too late. You don't even deserve a special color."))
 		sys.exit()
+
+#framework for sending requests through proxies
+def spamMojang():
+	# setting up url to change name 
+	URL = "https://api.mojang.com/user/profile/"
+	URL2 = "/name"  
+	headers = {"Authorization": "Bearer "+ accessToken, 'User-Agent': useragent}
+	data2 = json.dumps({"name": newname, "password":password})
+	for dict_item in proxyList:
+		# construct an HTTP session
+		session = requests.Session()
+		# choose one random proxy
+		session.proxy = dict_item
+		s = session
+		t = datetime.datetime.now()
+		r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, timeout = 5)
+		if not r:
+			print(colored("REQUEST FAILED[{}]", "red").format(dict_item))
+			print("Current time is: {}".format(t))
+		else:
+			print(colored("REQUEST SUCCESSFUL[{}]" + t, "green").format(dict_item))
+			print("Current time is: {}".format(t))
+			sys.exit()
 
 username = config["name"]	
 email = config["email"]	
@@ -157,8 +164,22 @@ proxyList = []
 
 print(colored("Gathering proxies, this may take a while...", "cyan"))
 
-for b in range(15):
-	threading.Thread(target=makeProxyDict(proxyList)).start()
+proxyThreads = []
+
+t1 = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor() as executor:
+	results = [executor.submit(makeProxyDict, proxyList) for _ in range(10)]
+t2 = time.perf_counter()
+proxyTime = t2-t1
+print(f"It took {proxyTime} seconds to gather proxies.")
+
+#for _ in range(10):
+#	t = threading.Thread(target=makeProxyDict, args=[proxyList])
+#	t.start()
+#	proxyThreads.append(t)
+
+#for proxyThread in proxyThreads:
+#	proxyThread.join()
 
 print(proxyList)
 
@@ -191,17 +212,18 @@ total_seconds = time_delta.total_seconds()
 clock = total_seconds/60
 result = str(datetime.timedelta(minutes=clock))
 print("{} till snipe".format(result))
-time.sleep(total_seconds - 2)
+time.sleep(total_seconds - 60)
 print("The sniper scopes in (1/2)") #tells you first part of program working
 
-
-
-
-
+time0 = time.perf_counter()
 
 # sending get request and saving the response as response object 
-for n in range(10):
-	threading.Thread(target=spamMojang).start()
+with concurrent.futures.ThreadPoolExecutor() as executor:
+	for n in range(10):
+		executor.map(spamMojang())
+
+#for n in range(10):
+#	threading.Thread(target=spamMojang).start()
 
 time1 = time.perf_counter();
 timetoprocess = str(time1-time0)
