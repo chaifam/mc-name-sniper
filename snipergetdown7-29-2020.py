@@ -9,6 +9,9 @@ import threading
 import sys
 import os
 import concurrent.futures
+import re
+from mojang import MojangUser
+from mojang.exceptions import SecurityAnswerError
 from colorama import init
 from bs4 import BeautifulSoup as bs
 from termcolor import colored
@@ -25,6 +28,8 @@ os.chdir(dir_path)
 
 with open("config.json", "r") as f:
 	config = json.load(f)
+
+
 
 
 useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
@@ -73,13 +78,23 @@ def getSession(proxies):
 	return session
 
 
-
 #tests each proxy and adds it to a dictionary
+#def makeProxyDict(l):	
+#	item = proxyTest("get", "https://www.minecraft.net/en-us")
+#	while True:	
+#		try:
+#			if item not in l and re.search('[a-zA-Z]', item["https"]) == None:
+#				l.append(item)
+#				print(item)
+#		except:
+#			continue
+#		else:
+#			break
 def makeProxyDict(l):	
 	item = proxyTest("get", "https://www.minecraft.net/en-us")
 	while True:	
 		try:
-			if item not in l:
+			if item not in l and re.search("[a-zA-Z_-]", item["https"]) == None:
 				l.append(item)
 				print(item)
 		except:
@@ -113,14 +128,14 @@ def scheduler():
 	totalMinutes = str(datetime.timedelta(minutes=businessTime))
 	print("{} till snipe".format(totalMinutes))
 	global accessToken
-	if seconds > 180:
-		wait = seconds - 180
-		print(colored("Good for you for planning ahead!", "yellow"))
+	if seconds > 45:
+		wait = seconds - 45
+		print(colored("I'll do my best!", "yellow"))
 		time.sleep(wait)
 		accessToken = getAT()
 
-	elif seconds <= 180:
-		print(colored("I could use a little more notice...", "magenta"))
+	elif seconds <= 45:
+		print(colored("You're really putting me on a time crunch...", "magenta"))
 		accessToken = getAT()
 		pass
 	else:
@@ -128,35 +143,63 @@ def scheduler():
 		sys.exit()
 
 def sniperBullet(plist):
-	# construct an HTTP session
-	session = requests.Session()
-	# choose one random proxy
-	session.proxy = plist
-	s = session
+#	# construct an HTTP session
+#	session = requests.Session()
+#	# choose one random proxy
+#	session.proxy = plist
+#	s = session
 	t = datetime.datetime.now()
-	r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, timeout = 5)
-	if not r:
+	URL = "https://api.mojang.com/user/profile/"
+	URL2 = "/name"
+	headers= {'Authorization': accessToken,'User-Agent': useragent}
+	data2 = {"name": newname, "password":password}
+	user = MojangUser(config["name"], config["password"], proxy = plist)
+
+	if not user.is_fully_authenticated: 
+		# print the security challenges if you need them
+		print(user.security_challenges)
+		
+		# make a list of the 3 answers to send
+		# make sure they are in the same order as the challenges
+		# they are not case-sensitive
+		answers = ["security"]
+		
+		# completes authentication
+		# throws SecurityAnswerError if a question is incorrect
+		try:
+			user.answer_security_challenges(answers)
+		except SecurityAnswerError:
+			print("A security answer was answered incorrectly.")
+	if not user.profile.is_name_change_allowed:
+		print("Account does not have an available name change")
+		print(f"It was last changed on {user.profile.name_changed_at}")
+	if not user.profile.change_name(newname):
 		str1 = colored("REQUEST FAILED[{}]", "red").format(plist)
 		str2 = colored(t, "cyan")
-		print(r.text)
+		print(r.status_code, r.text)
 		return str1 + " @ " + str2 + "\n"
 	else:
 		str1 = colored("REQUEST SUCCESSFUL[{}]", "green").format(plist)
 		str2 = colored(t, "cyan")
+		print(r.status_code, r.text)
 		return str1 + " @ " + str2 + "\n"
-		sys.exit()
+
+
+#	r = s.post(url = URL+usernameid+URL2, headers = headers, data = data2, timeout = 5)
+#	if not r:
+#		str1 = colored("REQUEST FAILED[{}]", "red").format(plist)
+#		str2 = colored(t, "cyan")
+#		print(r.status_code, r.text)
+#		return str1 + " @ " + str2 + "\n"
+#	else:
+#		str1 = colored("REQUEST SUCCESSFUL[{}]", "green").format(plist)
+#		str2 = colored(t, "cyan")
+#		return str1 + " @ " + str2 + "\n"
+#		sys.exit()
 
 #framework for sending requests through proxies
 def spamMojang():
 	# setting up url to change name 
-	global URL
-	URL = "https://api.mojang.com/user/profile/"
-	global URL2
-	URL2 = "/name"
-	global headers  
-	headers = {"Authorization": "Bearer "+ accessToken, 'User-Agent': useragent}
-	global data2
-	data2 = json.dumps({"name": newname, "password":password})
 	with concurrent.futures.ThreadPoolExecutor() as executor:
 		spamResults = executor.map(sniperBullet, proxyList)
 		for spamResult in spamResults:
@@ -173,6 +216,10 @@ print(username)
 print(email)
 print(password)
 print(newname)
+usernameidreq = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
+jsonusernameid = usernameidreq.json()
+usernameid = jsonusernameid["id"]
+print(usernameid)
 
 
 scheduler()
@@ -184,19 +231,17 @@ print(colored("Gathering proxies, this may take a while...", "cyan"))
 
 t1 = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor() as executor:
-	results = [executor.submit(makeProxyDict, proxyList) for _ in range(20)]
+	results = [executor.submit(makeProxyDict, proxyList) for _ in range(15)]
 t2 = time.perf_counter()
 proxyTime = t2-t1
 print(f"It took {proxyTime} seconds to gather proxies.")
+
 
 print(proxyList)
 
 a = 0
 
-usernameidreq = requests.get(url = "https://api.mojang.com/users/profiles/minecraft/"+username)
-jsonusernameid = usernameidreq.json()
-usernameid = jsonusernameid["id"]
-print(usernameid)
+
 #Justins code (magic)
 x = rightNowTime() 
 date_time_2_str = (date_entry + " " + time_entry)
