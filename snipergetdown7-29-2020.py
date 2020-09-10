@@ -128,7 +128,6 @@ def scheduler():
 	totalMinutes = str(datetime.timedelta(minutes=businessTime))
 	print("{} till snipe".format(totalMinutes))
 	global accessToken
-<<<<<<< HEAD
 	if seconds > 45:
 		wait = seconds - 45
 		print(colored("I'll do my best!", "yellow"))
@@ -137,16 +136,6 @@ def scheduler():
 
 	elif seconds <= 45:
 		print(colored("You're really putting me on a time crunch...", "magenta"))
-=======
-	if seconds > 300:
-		wait = seconds - 300
-		print(colored("Good for you for planning ahead!", "yellow"))
-		time.sleep(wait)
-		accessToken = getAT()
-
-	elif seconds <= 300:
-		print(colored("I could use a little more notice...", "magenta"))
->>>>>>> parent of a91ee58... Update snipergetdown7-29-2020.py
 		accessToken = getAT()
 		pass
 	else:
@@ -187,10 +176,7 @@ def sniperBullet(plist):
 	if not user.profile.change_name(newname):
 		str1 = colored("REQUEST FAILED[{}]", "red").format(plist)
 		str2 = colored(t, "cyan")
-<<<<<<< HEAD
 		print(r.status_code, r.text)
-=======
->>>>>>> parent of a91ee58... Update snipergetdown7-29-2020.py
 		return str1 + " @ " + str2 + "\n"
 	else:
 		str1 = colored("REQUEST SUCCESSFUL[{}]", "green").format(plist)
