@@ -94,7 +94,7 @@ def makeProxyDict(l):
 	item = proxyTest("get", "https://www.minecraft.net/en-us")
 	while True:	
 		try:
-			if item not in l and re.search("^[a-zA-Z_-]*$", item["https"]) == None:
+			if item not in l and re.search("[a-zA-Z_-]", item["https"]) == None:
 				l.append(item)
 				print(item)
 		except:
@@ -153,7 +153,7 @@ def sniperBullet(plist):
 	URL2 = "/name"
 	headers= {'Authorization': accessToken,'User-Agent': useragent}
 	data2 = {"name": newname, "password":password}
-	user = MojangUser(config["name"], config["password"], proxy = plist["https"])
+	user = MojangUser(config["name"], config["password"], proxy = plist)
 
 	if not user.is_fully_authenticated: 
 		# print the security challenges if you need them
