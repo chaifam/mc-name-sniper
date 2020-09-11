@@ -18,17 +18,17 @@ class profile:
 		self.email = email
 		self.password = password
 
-for e in range(config["numAccounts"]):
+numAccounts = len(config["emails"])
+
+for e in range(numAccounts):
 	c = profile(config["emails"][e], config["passwords"][e])
 	print(c.email, c.password)
-	user = MojangUser(c.email, c.password)
 
+user = MojangUser(c.email, c.password)
 newname = input("Input name to be blocked: \n")
-
 drop_timestamp = MojangAPI.get_drop_timestamp(newname)
-
 if not drop_timestamp:
-	print(f"{newname} is not dropping")
+	print(colored(f"{newname} is not dropping", "cyan"))
 else:
 	seconds = drop_timestamp - time.time()
-	print(f"bells drops in {seconds} seconds")
+	print(colored(f"{newname} drops in {seconds} seconds", "cyan"))
