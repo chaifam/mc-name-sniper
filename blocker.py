@@ -20,33 +20,35 @@ with open("config.json", "r") as f:
 	config = json.load(f)
 
 class account:
+	newname = input("Input name to be blocked: \n")
+	user = None
 
 	def __init__ (self, email, password):
 		self.email = email
 		self.password = password
 
-	def login(self):
+	# def login(self):
+	# 	user = MojangUser(self.email, self.password)
+	# 	return user
+
+	def block(self):
+		drop_timestamp = MojangAPI.get_drop_timestamp(self.newname)
 		user = MojangUser(self.email, self.password)
-		return user
-
-
-def block():	
-	drop_timestamp = MojangAPI.get_drop_timestamp(newname)
-	if not drop_timestamp:
-		print(colored(f"{newname} is not dropping", "cyan"))
-	else:
-		seconds = drop_timestamp - time.time()
-		print(colored(f"{newname} drops in {seconds} seconds", "cyan"))
-		
-	if user.block_username(newname, seconds):
-		print(f"Blocked the username {newname}")
-		time.sleep(35)
-		if user.block_username({newname}):
-			print("Success!")
+		if not drop_timestamp:
+			print(colored(f"{self.newname} is not dropping", "cyan"))
 		else:
-			print("False positive :(")
+			seconds = drop_timestamp - time.time()
+			time.sleep(seconds)
+			
+		if user.block_username(self.newname):
+			print(f"Blocked the username {self.newname}")
+			time.sleep(35)
+			if user.block_username({self.newname}):
+				print("Success!")
+			else:
+				print("False positive :(")
 
-newname = input("Input name to be blocked: \n")
+
 emails = config["email"]
 passwords = config["password"]
 
@@ -54,5 +56,9 @@ accounts = list()
 for i in emails:
 	accounts.append(account(i, passwords))
 
-for obj in accounts:
-	print(obj.login())
+with concurrent.futures.ThreadPoolExecutor() as executor:
+	for account in accounts:
+		#executor.submit(obj.login)
+		print(f"Logging in on {account.email} {account.password}.")
+		for _ in range(3):
+			executor.submit(account.block)
