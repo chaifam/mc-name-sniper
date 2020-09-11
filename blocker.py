@@ -27,38 +27,24 @@ class account:
 		self.email = email
 		self.password = password
 
-	# def login(self):
-	# 	user = MojangUser(self.email, self.password)
-	# 	return user
-
-	def block(self):
-		drop_timestamp = MojangAPI.get_drop_timestamp(self.newname)
-		user = MojangUser(self.email, self.password)
-		if not drop_timestamp:
-			print(colored(f"{self.newname} is not dropping", "cyan"))
-		else:
-			seconds = drop_timestamp - time.time()
-			time.sleep(seconds)
-			
-		if user.block_username(self.newname):
-			print(f"Blocked the username {self.newname}")
-			time.sleep(35)
-			if user.block_username({self.newname}):
-				print("Success!")
-			else:
-				print("False positive :(")
+	def login(self):
+		self.user = MojangUser(self.email, self.password)
 
 
-emails = config["email"]
-passwords = config["password"]
+def main():
+	emails = config["email"]
+	passwords = config["password"]
+	accounts = list()
+	for i in emails:
+		new_account = account(i, passwords)
+		accounts.append(new_account)
 
-accounts = list()
-for i in emails:
-	accounts.append(account(i, passwords))
+	with concurrent.futures.ThreadPoolExecutor() as executor:
+		for account in accounts:
+			executor.submit(account.login)
+			print(f"Logging in on {accont.user}.")
 
-with concurrent.futures.ThreadPoolExecutor() as executor:
-	for account in accounts:
-		#executor.submit(obj.login)
-		print(f"Logging in on {account.email} {account.password}.")
-		for _ in range(3):
-			executor.submit(account.block)
+if __name__ == '__main__':
+	main()
+
+
