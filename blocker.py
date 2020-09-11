@@ -28,11 +28,11 @@ class account:
 		self.user = MojangUser(self.email, self.password, maximum_pool_size = 3)
 
 	def block1(self):
-		if self.user.block_username(newname):
-			print(colored(f"Blocked the username {newname}", "cyan"))
+		if self.user.block_username(self.newname):
+			print(colored(f"Blocked the username {self.newname}", "cyan"))
 
 			time.sleep(35)
-			if user.block_username(newname):
+			if user.block_username(self.newname):
 				string = colored("Block confirmed", "green")
 				return string
 			else:
@@ -41,7 +41,7 @@ class account:
 
 	def block(self):	
 		with concurrent.futures.ThreadPoolExecutor() as executor:
-			results = [executor.submit(self.block1) for req in range(3)]
+			results = [executor.submit(self.block1()) for req in range(3)]
 			for f in concurrent.futures.as_completed(results):
 				print(f.result)
 
