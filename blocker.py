@@ -6,6 +6,7 @@ import concurrent.futures
 from colorama import init
 from termcolor import colored
 from mojang import MojangAPI, MojangUser
+from mojang.exceptions import SecurityAnswerError
 
 #x = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
 #y = x + "@gmail.com"
@@ -26,6 +27,15 @@ class account:
 		self.email = email
 		self.password = password
 		self.user = MojangUser(self.email, self.password, maximum_pool_size = 3)
+		if self.user.is_fully_authenticated:
+			print("Authenticated, security challenges are not required.")
+		else:
+			print(self.user.security_challenges) 
+			answers = ["", "", ""]
+			try:
+				self.user.answer_security_challenges(answers)
+			except SecurityAnswerError:
+				print("A security answer was answered incorrectly.")
 
 	def block1(self):
 		if self.user.block_username(self.newname):
