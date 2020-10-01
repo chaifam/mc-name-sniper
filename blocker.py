@@ -31,7 +31,7 @@ class account:
 			print("Authenticated, security challenges are not required.")
 		else:
 			print(self.user.security_challenges) 
-			answers = ["", "", ""]
+			answers = ["riseAndSnipe", "riseAndSnipe", "riseAndSnipe"]
 			try:
 				self.user.answer_security_challenges(answers)
 			except SecurityAnswerError:
