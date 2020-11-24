@@ -67,64 +67,6 @@ def makeProxyDict(l):
 		else:
 			break
 
-
-#sets times for program to sleep and wake up in order to snipe the name at the right time
-def scheduler():
-	drop_timestamp = MojangAPI.get_drop_timestamp()
-
-	if not drop_timestamp:
-		print(f"{newname} is not dropping")
-	else:
-		dropSeconds = drop_timestamp - time.time()
-		print(f"{newname} drops in {dropSeconds} seconds")
-		totalMinutes = str(datetime.timedelta(minutes=dropSeconds))
-		print("{} till snipe".format(totalMinutes))
-		if seconds > 180:
-			wait = dropSeconds - 180
-			print(colored("I'll do my best!", "yellow"))
-			time.sleep(wait)
-
-		elif dropSeconds <= 180:
-			print(colored("You're really putting me on a time crunch...", "magenta"))
-			pass
-		else:
-			print(colored("You are too late. You don't even deserve a special color."))
-			sys.exit()
-
-def sniperBullet(plist):
-	try:
-		user = MojangUser(config["name"], config["password"], proxy = plist["https"])
-
-		if not user.is_fully_authenticated: 
-			# print the security challenges if you need them
-			print(user.security_challenges)
-			
-			# make a list of the 3 answers to send
-			# make sure they are in the same order as the challenges
-			# they are not case-sensitive
-			answers = ["security"]
-			
-			# completes authentication
-			# throws SecurityAnswerError if a question is incorrect
-			try:
-				user.answer_security_challenges(answers)
-			except SecurityAnswerError:
-				print("A security answer was answered incorrectly.")
-		if not user.profile.is_name_change_allowed:
-			print("Account does not have an available name change")
-			print(f"It was last changed on {user.profile.name_changed_at}")
-	if user.profile.change_name(newname) == True:
-		t = datetime.datetime.now()
-		str1 = colored("REQUEST SUCCESSFUL[{}]", "green").format(plist)
-		str2 = colored(t, "cyan")
-		print(r.status_code, r.text)
-		return str1 + " @ " + str2 + "\n"
-	else:
-		t = datetime.datetime.now()
-		str1 = colored("REQUEST FAILED[{}]", "red").format(plist)
-		str2 = colored(t, "cyan")
-		print(r.status_code, r.text)
-		return str1 + " @ " + str2 + "\n"
 		
 
 
